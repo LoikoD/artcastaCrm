@@ -1,4 +1,4 @@
-import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE } from './types'
+import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, LOGIN } from './types'
 
 // function getCategoryByName(categoryName) {
 //     return {
@@ -12,7 +12,9 @@ const initialState = {
     currentCategory: {},
     allTables: [],
     tables: [],
-    currentTable: {}
+    currentTable: {},
+    user: {},
+    loggedIn: 0
 }
 
 export const navigationReducer = (state = initialState, action) => {
@@ -27,20 +29,26 @@ export const navigationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 allTables: action.tables,
-                tables: action.tables.filter(table => table.CategoryId == state.currentCategory.CategoryId),
-                currentTable: action.tables.find(table => table.CategoryId == state.currentCategory.CategoryId)
+                tables: action.tables.filter(table => table.CategoryId === state.currentCategory.CategoryId),
+                currentTable: action.tables.find(table => table.CategoryId === state.currentCategory.CategoryId)
 
             }        
         case OPEN_CATEGORY:
             return {
                 ...state,
                 currentCategory: action.category,
-                tables: state.allTables.filter(table => table.CategoryId == action.category.CategoryId)
+                tables: state.allTables.filter(table => table.CategoryId === action.category.CategoryId)
             }    
         case OPEN_TABLE:
             return {
                 ...state,
                 currentTable: action.table
+                }
+        case LOGIN:
+            return {
+                ...state,
+                user: action.user,
+                loggedIn: action.loggedIn
                 }
         default:
             return state;

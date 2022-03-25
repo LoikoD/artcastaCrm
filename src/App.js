@@ -3,21 +3,22 @@ import {Home} from './Home';
 import TablePage from './TablePage';
 import CategoryNavigation from './CategoryNavigation';
 import TableNavigation from './TableNavigation';
-import { categoriesLoad, tablesLoad } from './redux/actions'
+import Login from './Login';
+import { categoriesLoad, tablesLoad, logout } from './redux/actions'
 import { useDispatch, useSelector} from 'react-redux';
 import { useState, useEffect } from 'react';
+import './App.css';
 
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
 function App(props) {
-
-  //const [tableName, setTableName] = useState('');
   
   const dispatch = useDispatch();
   
-  const allTables = useSelector(state => {
+  const tables = useSelector(state => {
     const {navigationReducer} = state;
-    return navigationReducer.allTables;
+    return navigationReducer.tables;
   });
 
   const categories = useSelector(state => {
@@ -30,6 +31,16 @@ function App(props) {
     return navigationReducer.currentTable;
   });
 
+  const loggedIn = useSelector(state => {
+    const {navigationReducer} = state;
+    return navigationReducer.loggedIn;
+  });
+
+  const user = useSelector(state => {
+    const {navigationReducer} = state;
+    return navigationReducer.user;
+  });
+
   useEffect(() => {
     if (window.location.pathname !== "/") {
       window.history.replaceState(null, null, "/");
@@ -39,25 +50,38 @@ function App(props) {
     dispatch(tablesLoad());
   }, []);
 
-  useEffect(() => {
-    if (currentTable.CategoryId != null && currentTable.TableId != null) {
-      window.history.replaceState(null, null, "/category/"+currentTable.CategoryId+"/table/"+currentTable.TableId);
-    }
-  }, [currentTable]);
+  const handleLogout = (e) => {
+    dispatch(logout());
+  }
 
   return (
-    <BrowserRouter>
-      <div className="container">
-        <h3 className='m-3 d-flex justify-content-center'>
-          ARTCasta
-        </h3>
+    <div>
       
-        <CategoryNavigation/>
-        <TableNavigation/>
+    {loggedIn === 1 ?
+      <div width='100%'>
+        <div className='header'>
 
-        <TablePage/>
+          <h3 className='header-name'>
+            ARTCasta
+          </h3>
+          <div className='header-right'>
+            <div className='username'>{user.Username}</div>
+            <button className='logout-btn' onClick={(e) => handleLogout(e)}>Выход</button>
+          </div>
+        </div>
+        <div className='container'>
+          <CategoryNavigation/>
+          <TableNavigation/>
+
+          {tables.length > 0 ? <TablePage/> : <div className='empty-category'>В базе отсутствуют таблицы.</div>}
+          
+
+        </div>
       </div>
-    </BrowserRouter>
+      : <Login/>
+    }
+    </div>
+
   );
 }
 

@@ -1,0 +1,42 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    font-family: "Inter";
+    background-color: rgb(236, 236, 236);
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+.login-form > h1 {
+    font-style: 35px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    letter-spacing: -1px;
+}
+.login-form > input {
+    min-width: 380px;
+    padding: 22px 0px;
+    padding-left: 15px;
+    margin-bottom: 10px;
+    outline: none;
+    border: 1px solid rgba (0,0,0,0.24);
+    font-family: "Inter";
+    border-radius: 2px;
+    font-size: 15px;
+}
+
+.submit-btn {
+    padding: 17px 30px;
+    margin-top: 10px;
+    background: black;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: 'Inter';
+    border-radius: 3px;
+}

@@ -3,6 +3,8 @@ import {NavLink} from 'react-router-dom';
 import {Navbar,Nav} from 'react-bootstrap';
 import { useDispatch, useSelector} from 'react-redux';
 import { openTable } from './redux/actions';
+import { tab } from '@testing-library/user-event/dist/tab';
+import './Navigation.css';
 
 function TableNavigation(props) {
 
@@ -16,23 +18,24 @@ function TableNavigation(props) {
         const {navigationReducer} = state;
         return navigationReducer.currentCategory;
     }); 
+    const currentTable = useSelector(state => {
+        const {navigationReducer} = state;
+        return navigationReducer.currentTable;
+    }); 
     const handleClickTab = (e, table) => {
         dispatch(openTable(table));
     }
 
     return(
-        <Navbar bg="dark" expand='lg'>
-            <Navbar.Toggle aria-controls='basic-navbar-nav'/>
-            <Navbar.Collapse id='basic-navbar-nav'>
-                <Nav>
-                    {tables.map(table=>
-                        <NavLink key={table.TableId} className='d-inline p-2 bg-dark text-white' onClick={(e) => handleClickTab(e, table)} to={`/category/${currentCategory.CategoryId}/table/${table.TableId}`}>
-                            {table.TableName}
-                        </NavLink>
-                    )}
-                </Nav>
-            </Navbar.Collapse>
-        </Navbar>
+        <div className='bloc-table-tabs'>
+
+            {tables.map(table=>
+                <button key={table.TableId} className={currentTable.TableId === table.TableId ? 'table-tabs active-table-tabs' : 'table-tabs'} onClick={(e) => handleClickTab(e, table)}>
+                    {table.TableName}
+                </button>
+            )}
+
+        </div>
     )
 }
 

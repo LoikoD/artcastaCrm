@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {Table} from 'react-bootstrap';
 import { useDispatch, useSelector} from 'react-redux';
+import './Navigation.css';
 
 function TablePage(props) {
 
@@ -12,8 +13,8 @@ function TablePage(props) {
       })
 
     return(
-        <div>
-            <Table className='mt-4' striped bordered hover size='sm'>
+        <div className='content-tabs'>
+            <Table className='content' striped bordered hover>
                 <thead>
                     <tr>
                         {currentTable?.Attributes?.map((attr)=>
@@ -27,7 +28,8 @@ function TablePage(props) {
                         <tr key={rowIdx}>
                             {row && currentTable.Attributes.map((attr)=>
                                 <td key={attr.AttrId}>
-                                    {row[attr.SystemAttrName]}
+                                    {attr.AttrTypeName === 'связь' ? row[attr.AttrTypeProp2] : row[attr.SystemAttrName]}
+                                    {/* {row[attr.SystemAttrName]} */}
                                 </td>
                             )}
                             <td>Edit / Delete</td>
