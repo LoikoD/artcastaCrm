@@ -6,8 +6,8 @@ function RequireAuth({ children }) {
     const location = useLocation();
     
     const loggedIn = useSelector(state => {
-      const {navigationReducer} = state;
-      return navigationReducer.loggedIn;
+      const {authReducer} = state;
+      return authReducer.loggedIn;
     });
   
     if (!loggedIn) {

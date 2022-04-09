@@ -20,9 +20,8 @@ let requestsToRefresh = [];
 let isRefreshRequesting = false;
 
 const requestInterceptor = (config) => {
-    //console.log("requestInterceptor > token: ", store.getState().navigationReducer.accessToken);
     if (!config.headers['Authorization']) {
-        config.headers['Authorization'] = `Bearer ${store.getState().navigationReducer.accessToken}`
+        config.headers['Authorization'] = `Bearer ${store.getState().authReducer.accessToken}`
     }
     return config;
 }

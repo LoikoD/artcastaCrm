@@ -1,14 +1,11 @@
-import { ADD_TABLE, CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW } from "./types";
-import axios from '../api/axios'
+import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE } from "./types";
 import { axiosPrivate } from "../api/axios";
 
 
 export function openTable(table) {
-
-
     return async dispatch => {
-
-        if (table.SystemTableName) {
+           
+        if (table?.SystemTableName) {
             try {
                 const response = await axiosPrivate.get('table/'+table.TableId);
                 dispatch({
@@ -19,13 +16,13 @@ export function openTable(table) {
             } catch (error) {
                 dispatch({
                     type: OPEN_TABLE,
-                    table: table
+                    table
                 });
             }
         } else {
             dispatch({
                 type: OPEN_TABLE,
-                table: table
+                table
             });
         }
     }
@@ -35,6 +32,13 @@ export function openCategory(category) {
     return {
         type: OPEN_CATEGORY,
         category
+    }
+}
+
+export function setLoadingState(isLoading) {
+    return {
+        type: LOADING_STATE,
+        isLoading
     }
 }
 
@@ -56,7 +60,6 @@ export function tablesLoad() {
 }
 
 export function categoriesLoad() {
-    
     return async dispatch => {
         try {
             const { data } = await axiosPrivate.get('category');

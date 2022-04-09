@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { openCategory, openTable } from './redux/actions';
-import { useEffect } from 'react';
+import { openCategory, openTable, setLoadingState } from './redux/actions';
 import './Navigation.css';
+import { useNavigate } from 'react-router-dom';
 
 function CategoryNavigation(props) {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const categories = useSelector(state => {
@@ -17,7 +18,7 @@ function CategoryNavigation(props) {
     const allTables = useSelector(state => {
         const {navigationReducer} = state;
         return navigationReducer.allTables;
-    }); 
+    });
 
     const currentCategory = useSelector(state => {
         const {navigationReducer} = state;
@@ -30,20 +31,29 @@ function CategoryNavigation(props) {
     });
 
     const handleClickTab = (e, category) => {
+        dispatch(setLoadingState(1));
         dispatch(openCategory(category));
         if (!currentTable || currentTable?.CategoryId !== category.CategoryId) {
             const table = allTables.find(table => table.CategoryId === category.CategoryId);
-            if (table) {
-                dispatch(openTable(table));
+            dispatch(openTable(table));
+            if (!table) {
+                dispatch(setLoadingState(0));
             }
         }
+        navigate('/');
     };
+
+    useEffect(() => {
+        if (JSON.stringify(currentTable) !== JSON.stringify({})) {
+            dispatch(setLoadingState(0));
+        }
+    }, [currentTable]);
 
     return (
         <div className='bloc-tabs'>
 
             {categories.map(category=>
-                <button key={category.CategoryId} className={currentCategory.CategoryId === category.CategoryId ? 'tabs active-tabs active-tabs-category' : 'tabs'} onClick={(e) => handleClickTab(e, category)}>
+                <button key={category.CategoryId} className={currentCategory?.CategoryId === category.CategoryId ? 'tabs active-tabs active-tabs-category' : 'tabs'} onClick={(e) => handleClickTab(e, category)}>
                     {category.CategoryName}
                 </button>
             )}

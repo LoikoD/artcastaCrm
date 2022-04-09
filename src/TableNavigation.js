@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
-import { openTable } from './redux/actions';
-import TablePage from './TablePage';
-import LoadingOverlay from './LoadingOverlay';
+import { openTable, setLoadingState } from './redux/actions';
+import { Outlet, useNavigate } from 'react-router-dom';
 import './Navigation.css';
 
 function TableNavigation() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const tables = useSelector(state => {
         const {navigationReducer} = state;
@@ -18,17 +18,17 @@ function TableNavigation() {
         return navigationReducer.currentTable;
     });
     const [selectedTable, setSelectedTable] = useState(currentTable);
-    const [loadingTable, setLoadingTable] = useState(1);
     const handleClickTab = (e, table) => {
-        setLoadingTable(1);
         setSelectedTable(table);
+        dispatch(setLoadingState(1));
         dispatch(openTable(table));
+        navigate('/');
     }
 
     useEffect(() => {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {
             setSelectedTable(currentTable);
-            setLoadingTable(0);
+            dispatch(setLoadingState(0));
         }
     }, [currentTable]);
 
@@ -43,11 +43,7 @@ function TableNavigation() {
                 )}
 
             </div>
-            <LoadingOverlay show={loadingTable} />
-            {JSON.stringify(currentTable) !== JSON.stringify({}) ? 
-                tables.length > 0 ? <TablePage/> : <div className='empty-category'>В базе отсутствуют таблицы.</div>
-                : <></>
-            }
+            <Outlet />
         </>
     )
 }

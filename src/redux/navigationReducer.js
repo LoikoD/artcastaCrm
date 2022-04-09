@@ -1,11 +1,4 @@
-import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW } from './types'
-
-// function getCategoryByName(categoryName) {
-//     return {
-//         CategoryName: categoryName
-//     }
-// }
-
+import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, SELECT_ROW, LOADING_STATE } from './types'
 
 const initialState = {
     categories: [],
@@ -13,11 +6,8 @@ const initialState = {
     allTables: [],
     tables: [],
     currentTable: {},
-    user: {},
-    loggedIn: 0,
-    accessToken: "",
-    firstLoad: 1,
-    currentRow: {}
+    currentRow: {},
+    isLoading: 1
 }
 
 export const navigationReducer = (state = initialState, action) => {
@@ -34,47 +24,31 @@ export const navigationReducer = (state = initialState, action) => {
                 ...state,
                 allTables: action.tables,
                 tables: action.tables.filter(table => table.CategoryId === state.currentCategory.CategoryId),
-                currentTable: action.tables.find(table => table.CategoryId === state.currentCategory.CategoryId)
-
+                currentTable:
+                    (state.currentTable?.CategoryId === state.currentCategory.CategoryId && action.tables.find(table => table.TableId === state.currentTable?.TableId))
+                    ? state.currentTable
+                    : action.tables.find(table => table.CategoryId === state.currentCategory.CategoryId)
             }        
         case OPEN_CATEGORY:
             return {
                 ...state,
                 currentCategory: action.category,
-                tables: state.allTables.filter(table => table.CategoryId === action.category.CategoryId)
+                tables: state.allTables.filter(table => table.CategoryId === action.category?.CategoryId)
             }    
         case OPEN_TABLE:
             return {
                 ...state,
                 currentTable: action.table
             }
-        case LOGIN:
-            console.log('LOGIN');
-            return {
-                ...state,
-                user: action.user,
-                loggedIn: action.loggedIn,
-                accessToken: action.accessToken,
-                firstLoad: action.firstLoad
-            }
-        case REFRESH:
-            console.log('REFRESH');
-            return {
-                ...state,
-                accessToken: action.accessToken,
-                loggedIn: action.accessToken ? 1 : 0
-            }
-        case INIT_LOCATION:
-            console.log('INIT_LOCATION');
-            return {
-                ...state,
-                initLocation: action.initLocation
-            }
         case SELECT_ROW:
-            console.log('SELECT_ROW');
             return {
                  ...state,
                 currentRow: action.row
+            }
+        case LOADING_STATE:
+            return {
+                 ...state,
+                isLoading: action.isLoading
             }
         default:
             return state;

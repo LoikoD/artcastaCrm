@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import './Home.css';
+import './Navigation.css';
 
 function ViewRow() {  
 
@@ -13,7 +13,7 @@ function ViewRow() {
       });
 
     return (
-        <div className='container'>
+        <div className='content-tabs content'>
             <h5>ViewRow</h5>
             <h6>CurrentTable:</h6>
             <div>{JSON.stringify(currentTable)}</div>

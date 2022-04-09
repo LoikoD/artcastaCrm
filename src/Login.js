@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from './redux/actions';
 import axios from 'axios'
@@ -20,13 +20,8 @@ function Login() {
     const [show, setShow] = useState(0);
 
     const loggedIn = useSelector(state => {
-        const {navigationReducer} = state;
-        return navigationReducer.loggedIn;
-    });
-
-    const initLocation = useSelector(state => {
-        const {navigationReducer} = state;
-        return navigationReducer.initLocation;
+        const {authReducer} = state;
+        return authReducer.loggedIn;
     });
 
     useEffect(() => {

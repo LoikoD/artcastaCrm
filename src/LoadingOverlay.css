@@ -1,11 +1,11 @@
 .spinner {
     display: inline-block;
     position: absolute;
-    top: 120px; left: 0px;
+    top: 0px; left: 0px;
     bottom: 0px; right: 0px;
     margin: auto;
     z-index: 1;
-    background-color: rgba(105, 105, 105, 0.2);
+    background-color: rgba(105, 105, 105, 0.1);
   }
 .lds-roller {
     display: inline-block;

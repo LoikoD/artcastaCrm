@@ -7,3 +7,4 @@ export const LOGIN = 'LOGIN';
 export const REFRESH = 'REFRESH';
 export const INIT_LOCATION = 'INIT_LOCATION';
 export const SELECT_ROW = 'SELECT_ROW';
+export const LOADING_STATE = 'LOADING_STATE';
