@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from './redux/actions';
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom';
-import './Login.css';
+import './styles/Login.css';
 
 function Login() {
 

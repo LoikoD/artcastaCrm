@@ -4,7 +4,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectRow } from './redux/actions';
 import LoadingOverlay from './LoadingOverlay';
-import './Navigation.css';
+import './styles/Navigation.css';
 
 function TablePage() {
 

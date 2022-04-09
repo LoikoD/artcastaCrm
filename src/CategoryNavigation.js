@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { openCategory, openTable, setLoadingState } from './redux/actions';
-import './Navigation.css';
+import './styles/Navigation.css';
 import { useNavigate } from 'react-router-dom';
 
 function CategoryNavigation(props) {

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import './Navigation.css';
+import './styles/Navigation.css';
 
 function ViewRow() {  
 

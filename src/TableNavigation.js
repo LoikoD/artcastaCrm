@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { openTable, setLoadingState } from './redux/actions';
 import { Outlet, useNavigate } from 'react-router-dom';
-import './Navigation.css';
+import './styles/Navigation.css';
 
 function TableNavigation() {
 

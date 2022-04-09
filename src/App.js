@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TablePage from './TablePage';
-import './App.css';
+import './styles/App.css';
 
 function App(props) {
   

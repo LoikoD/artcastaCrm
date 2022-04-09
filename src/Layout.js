@@ -6,7 +6,7 @@ import RequireAuth from './RequireAuth';
 import CategoryNavigation from './CategoryNavigation';
 import { categoriesLoad, openCategory } from './redux/actions';
 
-import './Layout.css';
+import './styles/Layout.css';
 
 function Layout() {
 

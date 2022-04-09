@@ -4,7 +4,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import { tablesLoad } from './redux/actions'
 import TableNavigation from './TableNavigation';
 import LoadingOverlay from './LoadingOverlay';
-import './TableLayout.css';
+import './styles/TableLayout.css';
 
 
 function Home() {  
