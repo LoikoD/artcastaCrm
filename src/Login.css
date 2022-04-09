@@ -40,3 +40,15 @@
     font-family: 'Inter';
     border-radius: 3px;
 }
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.errmsg {
+    background-color: red;
+    color: white;
+    padding: 0.5rem;
+    margin-top: 1rem;
+}

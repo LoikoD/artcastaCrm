@@ -1,16 +1,19 @@
-import { ADD_TABLE, CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN } from "./types";
-import axios from 'axios'
-import bcrypt from "bcryptjs";
+import { ADD_TABLE, CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW } from "./types";
+import axios from '../api/axios'
+import { axiosPrivate } from "../api/axios";
+
 
 export function openTable(table) {
+
+
     return async dispatch => {
 
         if (table.SystemTableName) {
             try {
-                const { data }  = await axios.get(process.env.REACT_APP_ARTCASTA_API+'table/'+table.TableId);
+                const response = await axiosPrivate.get('table/'+table.TableId);
                 dispatch({
                     type: OPEN_TABLE,
-                    table: data
+                    table: response?.data
                 });
                
             } catch (error) {
@@ -38,21 +41,12 @@ export function openCategory(category) {
 export function tablesLoad() {
     return async dispatch => {
         try {
-            const { data } = await axios.get(process.env.REACT_APP_ARTCASTA_API+'table');
-            // const data = [
-            //     {
-            //         tableName: 'Company'
-            //     },
-            //     {
-            //         tableName: 'Project2'
-            //     }
-            // ];
+            const { data } = await axiosPrivate.get('table');
             dispatch({
                 type: TABLES_LOAD,
                 tables: data
             });
         } catch (error) {
-            console.log('tablesLoad > ', error);
             dispatch({
                 type: TABLES_LOAD,
                 tables: []
@@ -62,15 +56,15 @@ export function tablesLoad() {
 }
 
 export function categoriesLoad() {
+    
     return async dispatch => {
         try {
-            const { data } = await axios.get(process.env.REACT_APP_ARTCASTA_API+'category');
+            const { data } = await axiosPrivate.get('category');
             dispatch({
                 type: CATEGORIES_LOAD,
                 categories: data
             });
         } catch (error) {
-            console.log('categoriesLoad > ', error);
             dispatch({
                 type: CATEGORIES_LOAD,
                 categories: []
@@ -79,47 +73,60 @@ export function categoriesLoad() {
     }
 }
 
-export function login(name, pwd, hashedPwd) {
-    return async dispatch => {
-        try {
-            // let user = {
-            //     Username: name,
-            //     Password: hashedPwd,
-            //     RoleId: 1
-            // }
-            //axios.post(process.env.REACT_APP_ARTCASTA_API+'login/user',user);
-            const { data } = await axios.get(process.env.REACT_APP_ARTCASTA_API + 'login/' + name);
-            if (bcrypt.compareSync(pwd, data.Password)) {
-                console.log('YESSS');
-                dispatch({
-                    type: LOGIN,
-                    user: data,
-                    loggedIn: 1
-                });
-            }
-            else {
-                console.log('no( ');
-                dispatch({
-                    type: LOGIN,
-                    user: {},
-                    loggedIn: 0
-                });
-            }
-        } catch (error) {
-            console.log('login > ', error);
-            dispatch({
-                type: LOGIN,
-                user: {},
-                loggedIn: 0
-            });
-        }
+export function login(user, accessToken) {
+    return {
+        type: LOGIN,
+        user,
+        accessToken,
+        loggedIn: user ? 1 : 0,
+        firstLoad: 0
     }
 }
 
 export function logout() {
+    return async dispatch => {
+        try {
+            console.log("logout >");
+            await axiosPrivate.delete('token');
+            dispatch({
+                type: LOGIN,
+                user: {},
+                accessToken: "",
+                loggedIn: 0
+            });
+        } catch (error) {
+        }
+    }
+}
+
+export function refreshAction(accessToken) {
     return {
-        type: LOGIN,
-        user: {},
-        loggedIn: 0
+        type: REFRESH,
+        accessToken
+    }
+}
+
+export function tryLogin() {
+    return async dispatch => {
+        try {
+            const { data } = await axiosPrivate.get('token/refresh');
+            dispatch(login(data.User, data.AccessToken));
+        } catch (error) {
+            dispatch(login(null, ""));
+        }
+    }
+}
+
+export function setInitLocation(initLocation) {
+    return {
+        type: INIT_LOCATION,
+        initLocation
+    }
+}
+
+export function selectRow(row) {
+    return {
+        type: SELECT_ROW,
+        row
     }
 }

@@ -1,4 +1,4 @@
-import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, LOGIN } from './types'
+import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW } from './types'
 
 // function getCategoryByName(categoryName) {
 //     return {
@@ -6,15 +6,18 @@ import { TABLES_LOAD, CATEGORIES_LOAD, OPEN_CATEGORY, OPEN_TABLE, LOGIN } from '
 //     }
 // }
 
+
 const initialState = {
     categories: [],
-    // currentCategory: window.location.pathname.split('/')[1] == 'category' ? getCategoryByName(window.location.pathname.split('/')[2]) : {},
     currentCategory: {},
     allTables: [],
     tables: [],
     currentTable: {},
     user: {},
-    loggedIn: 0
+    loggedIn: 0,
+    accessToken: "",
+    firstLoad: 1,
+    currentRow: {}
 }
 
 export const navigationReducer = (state = initialState, action) => {
@@ -23,7 +26,8 @@ export const navigationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 categories: action.categories,
-                currentCategory: action.categories.length > 0 && window.location.pathname == "/" ? action.categories[0] : {}
+                currentCategory: (Object.keys(state.currentCategory).length === 0 && action.categories.length > 0) ? action.categories[0] : state.currentCategory
+               // currentCategory: action.categories.length > 0 ? action.categories[0] : {}
             }  
         case TABLES_LOAD:
             return {
@@ -43,13 +47,35 @@ export const navigationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentTable: action.table
-                }
+            }
         case LOGIN:
+            console.log('LOGIN');
             return {
                 ...state,
                 user: action.user,
-                loggedIn: action.loggedIn
-                }
+                loggedIn: action.loggedIn,
+                accessToken: action.accessToken,
+                firstLoad: action.firstLoad
+            }
+        case REFRESH:
+            console.log('REFRESH');
+            return {
+                ...state,
+                accessToken: action.accessToken,
+                loggedIn: action.accessToken ? 1 : 0
+            }
+        case INIT_LOCATION:
+            console.log('INIT_LOCATION');
+            return {
+                ...state,
+                initLocation: action.initLocation
+            }
+        case SELECT_ROW:
+            console.log('SELECT_ROW');
+            return {
+                 ...state,
+                currentRow: action.row
+            }
         default:
             return state;
     }  

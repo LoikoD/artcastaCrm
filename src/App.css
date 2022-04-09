@@ -8,49 +8,6 @@
     background: #fff;
   }
   
-  .container {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    background: #fff;
-    margin: 100px auto auto auto;
-    word-break: normal;
-    padding: 0;
-    max-width: 97%;
-  }
 
-  .empty-category {
-    margin: 10px;
-    text-align: center;
-  }
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 30px;
-  }
-
-  .header-right {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .header-name {
-    margin-left: 30px
-  }
-
-  .username {
-    margin-right: 30px;
-  }
-
-  .logout-btn {
-    padding: 5px 10px;
-    margin-right: 30px;
-    background: #337ab7;
-    border: none;
-    color: white;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
-}
+  

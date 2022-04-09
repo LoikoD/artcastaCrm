@@ -77,3 +77,12 @@
     margin-top: 10px;
     overflow-x: scroll;
   }
+  .empty-category {
+    margin: 10px;
+    text-align: center;
+  }
+  .row {
+    display: table-row;
+    vertical-align: inherit;
+    cursor: pointer;
+  }

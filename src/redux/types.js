@@ -4,3 +4,6 @@ export const OPEN_CATEGORY = 'OPEN_CATEGORY';
 export const TABLES_LOAD = 'TABLES_LOAD';
 export const CATEGORIES_LOAD = 'CATEGORIES_LOAD';
 export const LOGIN = 'LOGIN';
+export const REFRESH = 'REFRESH';
+export const INIT_LOCATION = 'INIT_LOCATION';
+export const SELECT_ROW = 'SELECT_ROW';
