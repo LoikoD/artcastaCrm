@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TablePage from './TablePage';
 import './styles/App.css';
+import { ViewRowMods } from './redux/enums';
 
 function App(props) {
   
@@ -31,7 +32,8 @@ function App(props) {
   });
 
   useEffect(() => {
-    if (window.location.pathname === '/view_row') {
+    const redirectNames = ['/view_row', '/add_row']
+    if (redirectNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
     }
 
@@ -55,7 +57,8 @@ function App(props) {
           <Route element={<Layout />}>
             <Route element={<TableLayout />} >
               <Route exact path="/" element={<TablePage />} />
-              <Route exact path="/view_row" element={<ViewRow />} />
+              <Route exact path="/view_row" element={<ViewRow mode={ViewRowMods.VIEW} />} />
+              <Route exact path="/add_row" element={<ViewRow mode={ViewRowMods.ADD} />} />
             </Route>
             <Route element={<Settings />} >
               <Route exact path="/configure" element={<ConfigureSettings />} />

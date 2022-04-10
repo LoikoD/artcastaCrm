@@ -4,15 +4,15 @@ import { axiosPrivate } from "../api/axios";
 
 export function openTable(table) {
     return async dispatch => {
-           
+
         if (table?.SystemTableName) {
             try {
-                const response = await axiosPrivate.get('table/'+table.TableId);
+                const response = await axiosPrivate.get('table/' + table.TableId);
                 dispatch({
                     type: OPEN_TABLE,
                     table: response?.data
                 });
-               
+
             } catch (error) {
                 dispatch({
                     type: OPEN_TABLE,
@@ -138,5 +138,35 @@ export function selectSettingsMenu(selectedMenu) {
     return {
         type: SELECT_SETTINGS_MENU,
         selectedMenu
+    }
+}
+
+export function saveRow(tableId, rowId, rowData) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.put(`table/${tableId}/row/${rowId}`, rowData);
+            dispatch(selectRow(rowData));
+            return 1;
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+export async function addRow(tableId, rowData) {
+    try {
+        await axiosPrivate.post(`table/${tableId}/row`, rowData);
+        return 1;
+    } catch (error) {
+        return 0;
+    }
+}
+
+export async function deleteRow(tableId, rowId) {
+    try {
+        await axiosPrivate.delete(`table/${tableId}/row/${rowId}`);
+        return 1;
+    } catch (error) {
+        return 0;
     }
 }

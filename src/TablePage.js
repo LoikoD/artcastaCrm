@@ -26,9 +26,11 @@ function TablePage() {
     });
 
     const handleRowEdit = (row) => {
-        console.log("handleRowEdit > row: ", row);
         dispatch(selectRow(row));
         navigate('/view_row');
+    };
+    const handleAddRow = () => {
+        navigate('/add_row');
     };
 
     return(
@@ -38,10 +40,11 @@ function TablePage() {
             {JSON.stringify(currentTable) !== JSON.stringify({}) ? 
                 tables.length > 0 ? 
                     <div className='content-tabs'>
+                        <button className='def-btn add-btn' onClick={() => handleAddRow()}>Добавить</button>
                         <Table className='content' striped bordered hover>
                             <thead>
                                 <tr>
-                                    {currentTable?.Attributes?.map((attr)=>
+                                    {currentTable?.Attributes.sort((a,b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr)=>
                                         attr.PkFlag === 0 && <th key={attr.AttrId}>{attr.AttrName}</th>
                                     )}
                                 </tr>
@@ -49,7 +52,7 @@ function TablePage() {
                             <tbody>
                                 {currentTable?.Data?.map((row, rowIdx)=>
                                     <tr key={rowIdx} className='row' onClick={() => handleRowEdit(row)}>
-                                        {row && currentTable.Attributes.map((attr)=>
+                                        {row && currentTable.Attributes.sort((a,b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr)=>
                                             attr.PkFlag === 0 &&
                                             <td key={attr.AttrId}>
                                                 {attr.AttrTypeName === 'связь' ? row[attr.AttrTypeProp2] : row[attr.SystemAttrName]}

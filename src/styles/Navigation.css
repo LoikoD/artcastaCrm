@@ -84,3 +84,16 @@ button {
   vertical-align: inherit;
   cursor: pointer;
 }
+.def-btn {
+  margin-top: 20px;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: none;
+  font-size: 14px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.add-btn {
+  background: #337ab7;
+  color: white;
+}
