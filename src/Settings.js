@@ -26,6 +26,9 @@ function Settings() {
             case SettingsMenu.ROLES:
                 navigate('/roles');
                 break;
+            default:
+                // cannot be reached
+                navigate('/');
         }
     };
 

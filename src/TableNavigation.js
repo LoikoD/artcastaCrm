@@ -19,6 +19,8 @@ function TableNavigation() {
     });
     const [selectedTable, setSelectedTable] = useState(currentTable);
     const handleClickTab = (e, table) => {
+        e.preventDefault();
+
         setSelectedTable(table);
         dispatch(setLoadingState(1));
         dispatch(openTable(table));

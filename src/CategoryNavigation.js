@@ -39,6 +39,8 @@ function CategoryNavigation(props) {
             if (!table) {
                 dispatch(setLoadingState(0));
             }
+        } else {
+            dispatch(setLoadingState(0));
         }
         navigate('/');
     };
