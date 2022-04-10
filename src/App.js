@@ -4,6 +4,9 @@ import Settings from './Settings';
 import Layout from './Layout';
 import Profile from './Profile';
 import ViewRow from './ViewRow';
+import ConfigureSettings from './ConfigureSettings';
+import UsersSettings from './UsersSettings';
+import RolesSettings from './RolesSettings';
 import { tryLogin } from './redux/actions'
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -54,7 +57,11 @@ function App(props) {
               <Route exact path="/" element={<TablePage />} />
               <Route exact path="/view_row" element={<ViewRow />} />
             </Route>
-            <Route exact path="/settings" element={<Settings />} />
+            <Route element={<Settings />} >
+              <Route exact path="/configure" element={<ConfigureSettings />} />
+              <Route exact path="/users" element={<UsersSettings />} />
+              <Route exact path="/roles" element={<RolesSettings />} />
+            </Route>
             <Route exact path="/profile" element={<Profile />} />
           </Route>
           <Route path="*" element={<Navigate to='/' replace />} />

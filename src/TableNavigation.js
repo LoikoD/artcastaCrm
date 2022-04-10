@@ -23,7 +23,7 @@ function TableNavigation() {
         dispatch(setLoadingState(1));
         dispatch(openTable(table));
         navigate('/');
-    }
+    };
 
     useEffect(() => {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {

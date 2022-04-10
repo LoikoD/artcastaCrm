@@ -31,7 +31,7 @@ function Layout() {
     }
     const handleSettings = () => {
       dispatch(openCategory(null));
-      navigate('/settings');
+      navigate('/configure');
     }
     const handleHome = () => {
       const category = categories.length > 0 ? categories[0] : null

@@ -1,4 +1,4 @@
-import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE } from "./types";
+import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU } from "./types";
 import { axiosPrivate } from "../api/axios";
 
 
@@ -131,5 +131,12 @@ export function selectRow(row) {
     return {
         type: SELECT_ROW,
         row
+    }
+}
+
+export function selectSettingsMenu(selectedMenu) {
+    return {
+        type: SELECT_SETTINGS_MENU,
+        selectedMenu
     }
 }
