@@ -16,13 +16,17 @@ function Home() {
         return navigationReducer.currentTable;
     });
     
+    const currentCategory = useSelector(state => {
+        const {navigationReducer} = state;
+        return navigationReducer.currentCategory;
+    });
     const [tablesLoading, setTablesLoading] = useState(1);
     
 
     useEffect(() => {
         setTablesLoading(1);
         dispatch(tablesLoad());
-    }, []);
+    }, [currentCategory]);
 
     useEffect(() => {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {

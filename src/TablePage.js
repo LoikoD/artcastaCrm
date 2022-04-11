@@ -7,7 +7,6 @@ import LoadingOverlay from './LoadingOverlay';
 import './styles/Navigation.css';
 import './styles/TablePage.css';
 import { SortDirection } from './redux/enums';
-import { render } from '@testing-library/react';
 
 function TablePage() {
 

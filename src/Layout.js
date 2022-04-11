@@ -44,7 +44,7 @@ function Layout() {
     }
 
     return (
-      <div width='100%'>
+      <div className='layout'>
         <div className='header'>
           <div className='header-name' onClick={() => handleHome()}>
             <h3>
