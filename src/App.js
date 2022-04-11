@@ -4,7 +4,7 @@ import Settings from './Settings';
 import Layout from './Layout';
 import Profile from './Profile';
 import ViewRow from './ViewRow';
-import ConfigureSettings from './ConfigureSettings';
+import ConfigureCategories from './ConfigureCategories';
 import UsersSettings from './UsersSettings';
 import RolesSettings from './RolesSettings';
 import { tryLogin } from './redux/actions'
@@ -14,6 +14,7 @@ import {BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-do
 import TablePage from './TablePage';
 import './styles/App.css';
 import { ViewRowMods } from './redux/enums';
+import ConfigureTables from './ConfigureTables';
 
 function App(props) {
   
@@ -32,7 +33,7 @@ function App(props) {
   });
 
   useEffect(() => {
-    const redirectNames = ['/view_row', '/add_row']
+    const redirectNames = ['/view_row', '/add_row', '/configure/tables']
     if (redirectNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
     }
@@ -61,7 +62,8 @@ function App(props) {
               <Route exact path="/add_row" element={<ViewRow mode={ViewRowMods.ADD} />} />
             </Route>
             <Route element={<Settings />} >
-              <Route exact path="/configure" element={<ConfigureSettings />} />
+              <Route exact path="/configure" element={<ConfigureCategories />} />
+              <Route exact path="/configure/tables" element={<ConfigureTables />} />
               <Route exact path="/users" element={<UsersSettings />} />
               <Route exact path="/roles" element={<RolesSettings />} />
             </Route>

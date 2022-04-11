@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { selectSettingsMenu } from './redux/actions';
 import { SettingsMenu } from './redux/enums';
+import LoadingOverlay from './LoadingOverlay';
 import './styles/Navigation.css';
+import './styles/Settings.css';
 
 function Settings() {  
 
@@ -12,6 +14,11 @@ function Settings() {
     const selectedMenu = useSelector(state => {
         const {settingsReducer} = state;
         return settingsReducer.selectedMenu;
+    });
+
+    const isLoading = useSelector(state => {
+        const {navigationReducer} = state;
+        return navigationReducer.isLoading;
     });
 
     const handleSelectSection = (selection) => {
@@ -33,18 +40,20 @@ function Settings() {
     };
 
     return (
+        <div className='settings-page'>
+            <LoadingOverlay show={isLoading} />
+            <div>
 
-        <div >
-
-            <button  className={selectedMenu === SettingsMenu.CONF ? 'table-tabs active-table-tabs' : 'table-tabs'} onClick={() => handleSelectSection(SettingsMenu.CONF)}>
-                {SettingsMenu.CONF}
-            </button>
-            <button className={selectedMenu === SettingsMenu.USERS ? 'table-tabs active-table-tabs' : 'table-tabs'} onClick={() => handleSelectSection(SettingsMenu.USERS)}>
-                {SettingsMenu.USERS}
-            </button>
-            <button className={selectedMenu === SettingsMenu.ROLES ? 'table-tabs active-table-tabs' : 'table-tabs'} onClick={() => handleSelectSection(SettingsMenu.ROLES)}>
-                {SettingsMenu.ROLES}
-            </button>
+                <button  className={selectedMenu === SettingsMenu.CONF ? 'settings-tabs active-settings-tabs' : 'settings-tabs'} onClick={() => handleSelectSection(SettingsMenu.CONF)}>
+                    {SettingsMenu.CONF}
+                </button>
+                <button className={selectedMenu === SettingsMenu.USERS ? 'settings-tabs active-settings-tabs' : 'settings-tabs'} onClick={() => handleSelectSection(SettingsMenu.USERS)}>
+                    {SettingsMenu.USERS}
+                </button>
+                <button className={selectedMenu === SettingsMenu.ROLES ? 'settings-tabs active-settings-tabs' : 'settings-tabs'} onClick={() => handleSelectSection(SettingsMenu.ROLES)}>
+                    {SettingsMenu.ROLES}
+                </button>
+            </div>
             <Outlet />
 
         </div>

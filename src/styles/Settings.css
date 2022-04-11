@@ -1,0 +1,28 @@
+.settings-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #d9d2e9;
+    margin-bottom: 10px;
+    border-radius: 0 10px 10px 10px;
+    
+}
+.settings-tabs {
+    border-radius: 10px;
+    margin: 5px;
+    padding: 10px;
+    text-align: center;
+    background: #337ab7;
+    cursor: pointer;
+    box-sizing: content-box;
+    position: relative;
+    outline: none;
+    font-weight: bold;
+    color: white;
+}
+
+.active-settings-tabs {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.274);
+    color: black;
+}

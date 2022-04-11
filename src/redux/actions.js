@@ -1,4 +1,4 @@
-import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU } from "./types";
+import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU, UPDATE_CATEGORIES, OPEN_CONF_CATEGORY } from "./types";
 import { axiosPrivate } from "../api/axios";
 
 
@@ -29,9 +29,11 @@ export function openTable(table) {
 }
 
 export function openCategory(category) {
-    return {
-        type: OPEN_CATEGORY,
-        category
+    return async dispatch => {
+        dispatch({
+            type: OPEN_CATEGORY,
+            category
+        });
     }
 }
 
@@ -168,5 +170,43 @@ export async function deleteRow(tableId, rowId) {
         return 1;
     } catch (error) {
         return 0;
+    }
+}
+
+export function updateCategories(categories) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.put(`category`, categories);
+            
+            dispatch({
+                type: UPDATE_CATEGORIES,
+                categories
+            });
+            return 1;
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+export function updateTables(tables) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.put(`table`, tables);
+            
+            dispatch(tablesLoad());
+            return 1;
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+export function openConfCategory(category) {
+    return async dispatch => {
+        dispatch({
+            type: OPEN_CONF_CATEGORY,
+            category
+        });
     }
 }

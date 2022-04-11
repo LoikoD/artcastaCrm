@@ -1,0 +1,106 @@
+.conf-page {
+    height: 100%;
+}
+.content-conf {
+    display: block;
+    margin: 20px auto auto auto;
+    width: fit-content;
+    background-color: #337ab7;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    min-width: 40%;
+}
+
+.category-header {
+    text-align: center;
+    color: white;
+}
+
+.category-block {
+    display: flex;
+    background-color: #d9d2e9;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conf-cat-name-block {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.conf-cat-btn-block {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.conf-btn {
+    padding: 5px 5px;
+    border: none;
+    font-size: 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.edit-conf-btn {
+    margin-left: 10px;
+    background: #337ab7;
+    color: white;
+}
+
+.delete-conf-btn {
+    margin-left: 10px;
+    background: #b30a04;
+    color: white;
+}
+
+.add-conf-btn {
+    background: #a6da19;
+    color: black;
+    border-radius: 7px;
+}
+
+.back-conf-btn {
+    background: #d9d2e9;
+    color: black;
+    border-radius: 7px;
+    margin-left: 15px;
+}
+
+.conf-cat-name {
+    font-weight: bold;
+    margin-left: 5px;
+    display: flex;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.conf-move-arrow {
+    padding: 0px 5px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #337ab7;
+    color: white;
+}
+
+.conf-no-data {
+    color: white;
+    font-weight: bold;
+    margin: 30px 0px;
+    text-align: center;
+}
+
+button:disabled,
+button[disabled]{
+  cursor: default;
+}
