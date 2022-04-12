@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Case, Switch } from './helpers/Switch';
 import LoadingOverlay from './LoadingOverlay';
 import { addRow, deleteRow, openTable, saveRow, setLoadingState } from './redux/actions';
-import { ViewRowMods } from './redux/enums';
+import { ViewMods } from './redux/enums';
 import './styles/ViewRow.css';
 
 function ViewRow(props) {
@@ -30,8 +30,8 @@ function ViewRow(props) {
     return emptyRow;
   }
 
-  const [attrs, setAttrs] = useState(props.mode === ViewRowMods.VIEW ? currentRow : generateNewRow());
-  const [isReadOnly, setIsReadOnly] = useState(props.mode === ViewRowMods.VIEW ? true : false);
+  const [attrs, setAttrs] = useState(props.mode === ViewMods.VIEW ? currentRow : generateNewRow());
+  const [isReadOnly, setIsReadOnly] = useState(props.mode === ViewMods.VIEW ? true : false);
   const [tablesLoading, setTablesLoading] = useState(0);
 
   const handleChangeInput = (attrName, value) => {
@@ -58,7 +58,7 @@ function ViewRow(props) {
 
 
     // TODO: Надо обрабатывать ошибки (result === 1, если все ок, но это не точно) и выводить описания ошибок на экран, возможно, не переключая режим isReadOnly
-    if (props.mode === ViewRowMods.VIEW) {
+    if (props.mode === ViewMods.VIEW) {
       dispatch(saveRow(currentTable.TableId, attrs[currentTable.Attributes.find(attr => attr.PkFlag === 1).SystemAttrName], attrs)).then((result) => {
         setTablesLoading(0);
         setIsReadOnly(true);
@@ -82,7 +82,7 @@ function ViewRow(props) {
 
     // TODO: добавить окно с просьбой подтвердить удаление
     // TODO: Надо обрабатывать ошибки (result === 1, если все ок, но это не точно) и выводить описания ошибок на экран, возможно, не переключая режим isReadOnly
-    if (props.mode === ViewRowMods.VIEW) {
+    if (props.mode === ViewMods.VIEW) {
       deleteRow(currentTable.TableId, attrs[currentTable.Attributes.find(attr => attr.PkFlag === 1).SystemAttrName]).then((result) => {
         setTablesLoading(0);
         setIsReadOnly(true);

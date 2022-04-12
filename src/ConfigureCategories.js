@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { openConfCategory, setLoadingState, tablesLoad, updateCategories } from './redux/actions';
+import { deleteCategory, openConfCategory, setLoadingState, tablesLoad, updateCategories } from './redux/actions';
 import './styles/Configure.css';
 
 function ConfigureCategories() {
@@ -54,10 +54,28 @@ function ConfigureCategories() {
 
     const handleDelete = (category) => {
         console.log('deleting category: ', category);
+        dispatch(deleteCategory(category)).then((result) => {
+            console.log(result);
+            dispatch(setLoadingState(0));
+        })
     };
 
     const handleEdit = (category) => {
+        dispatch(setLoadingState(1));
         console.log('editing category: ', category);
+        dispatch(openConfCategory(category)).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/edit_category');
+        })
+    };
+
+    const handleAdd = () => {
+        dispatch(setLoadingState(1));
+        console.log('adding category');
+        dispatch(openConfCategory({})).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/add_category');
+        })
     };
 
     const handleOpenCategory = (category) => {
@@ -82,12 +100,12 @@ function ConfigureCategories() {
     return (
         <div className='conf-page'>
             <div className='content-conf'>
-                <h4 className='category-header'>Категории</h4>
+                <h4 className='conf-header'>Категории</h4>
                 <div>
                     {sortedCategories.map(category =>
-                        <div key={category.CategoryId} className='category-block'>
+                        <div key={category.CategoryId} className='conf-block'>
 
-                            <div className='conf-cat-name-block' onClick={() => handleOpenCategory(category)}>
+                            <div className='conf-cat-name-block' >
                                 <button
                                     className='conf-move-arrow'
                                     onClick={() => handleMoveUp(category.Ord)}
@@ -100,13 +118,13 @@ function ConfigureCategories() {
                                     disabled={category.Ord === sortedCategories.length ? true : false} >
                                     ↓
                                 </button >
-                                <div className='conf-cat-name'>
+                                <div className='conf-name' onClick={() => handleOpenCategory(category)}>
                                     <div>{category.Ord}.&nbsp;</div>
                                     <div>{category.CategoryName}</div>
                                 </div>
                             </div>
 
-                            <div className='conf-cat-btn-block'>
+                            <div className='conf-btn-block'>
                                 <button
                                     className='conf-btn edit-conf-btn'
                                     onClick={() => handleEdit(category)}
@@ -119,9 +137,12 @@ function ConfigureCategories() {
                         </div>
                     )}
                 </div>
-                <button
-                    className='conf-btn add-conf-btn'
-                >Добавить категорию</button>
+                <div className='conf-bottom-btn-block'>
+                    <button
+                        className='conf-btn add-conf-btn'
+                        onClick={() => handleAdd()}
+                    >Добавить категорию</button>
+                </div>
             </div>
         </div>
     );

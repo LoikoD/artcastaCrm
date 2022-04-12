@@ -85,13 +85,13 @@ function ConfigureTables() {
     return (
         <div className='conf-page'>
             <div className='content-conf'>
-                <h4 className='category-header'>Категория:&nbsp;{confCategory.CategoryName}</h4>
+                <h4 className='conf-header'>Категория:&nbsp;{confCategory.CategoryName}</h4>
                 {sortedTables.length > 0 ?
                     <div>
                         {sortedTables.map(table =>
-                            <div key={table.TableId} className='category-block'>
+                            <div key={table.TableId} className='conf-block'>
 
-                                <div className='conf-cat-name-block' onClick={() => handleOpenTable(table)}>
+                                <div className='conf-cat-name-block'>
                                     <button
                                         className='conf-move-arrow'
                                         onClick={() => handleMoveUp(table.Ord)}
@@ -104,13 +104,13 @@ function ConfigureTables() {
                                         disabled={table.Ord === sortedTables.length ? true : false} >
                                         ↓
                                     </button >
-                                    <div className='conf-cat-name'>
+                                    <div className='conf-name' onClick={() => handleOpenTable(table)}>
                                         <div>{table.Ord}.&nbsp;</div>
                                         <div>{table.TableName}</div>
                                     </div>
                                 </div>
 
-                                <div className='conf-cat-btn-block'>
+                                <div className='conf-btn-block'>
                                     <button
                                         className='conf-btn edit-conf-btn'
                                         onClick={() => handleEdit(table)}
@@ -125,7 +125,7 @@ function ConfigureTables() {
                     </div>
                     : <div className='conf-no-data'>В данной категории нет таблиц.</div>
                 }
-                <div>
+                <div className='conf-bottom-btn-block'>
                     <button
                         className='conf-btn add-conf-btn'
                     >Добавить категорию</button>

@@ -206,7 +206,46 @@ export function openConfCategory(category) {
     return async dispatch => {
         dispatch({
             type: OPEN_CONF_CATEGORY,
-            category
+            category: category
         });
+    }
+}
+
+export function deleteCategory(category) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.delete(`category/${category.CategoryId}`);
+            
+            dispatch(categoriesLoad());
+            return 1;
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+export function updateCategory(category) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.put(`category/${category.CategoryId}`, category);
+            
+            dispatch(categoriesLoad());
+            return 1;
+        } catch (error) {
+            return 0;
+        }
+    }
+}
+
+export function createCategory(category) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.post(`category`, category);
+            
+            dispatch(categoriesLoad());
+            return 1;
+        } catch (error) {
+            return 0;
+        }
     }
 }

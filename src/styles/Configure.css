@@ -1,6 +1,7 @@
 .conf-page {
     height: 100%;
 }
+
 .content-conf {
     display: block;
     margin: 20px auto auto auto;
@@ -12,12 +13,12 @@
     min-width: 40%;
 }
 
-.category-header {
+.conf-header {
     text-align: center;
     color: white;
 }
 
-.category-block {
+.conf-block {
     display: flex;
     background-color: #d9d2e9;
     color: black;
@@ -33,7 +34,7 @@
     justify-content: flex-start;
 }
 
-.conf-cat-btn-block {
+.conf-btn-block {
     display: flex;
     justify-content: flex-end;
 }
@@ -59,7 +60,18 @@
     color: white;
 }
 
+.conf-bottom-btn-block {
+    display: flex;
+    justify-content: center;
+}
+
 .add-conf-btn {
+    background: #a6da19;
+    color: black;
+    border-radius: 7px;
+}
+
+.save-conf-btn {
     background: #a6da19;
     color: black;
     border-radius: 7px;
@@ -72,7 +84,7 @@
     margin-left: 15px;
 }
 
-.conf-cat-name {
+.conf-name {
     font-weight: bold;
     margin-left: 5px;
     display: flex;
@@ -101,6 +113,26 @@
 }
 
 button:disabled,
-button[disabled]{
-  cursor: default;
+button[disabled] {
+    cursor: default;
+}
+
+.conf-edit-block {
+    display: flex;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.conf-edit-name {
+    font-size: large;
+}
+
+.str-value-input {
+    margin-left: 20px;
+    border: 0;
+    padding: 2px 5px;
+    width: 40%;
 }
