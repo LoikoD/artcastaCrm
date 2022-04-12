@@ -5,6 +5,7 @@ import { SettingsMenu } from './redux/enums';
 import LoadingOverlay from './LoadingOverlay';
 import './styles/Navigation.css';
 import './styles/Settings.css';
+import { useEffect } from 'react';
 
 function Settings() {  
 

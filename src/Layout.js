@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from './redux/actions'
+import { logout, selectSettingsMenu } from './redux/actions'
 import { Outlet, useNavigate } from 'react-router-dom';
 import RequireAuth from './RequireAuth';
 import CategoryNavigation from './CategoryNavigation';
 import { categoriesLoad, openCategory } from './redux/actions';
+import { SettingsMenu } from './redux/enums';
 
 import './styles/Layout.css';
 
@@ -31,6 +32,7 @@ function Layout() {
     }
     const handleSettings = () => {
       dispatch(openCategory(null));
+      dispatch(selectSettingsMenu(SettingsMenu.CONF));
       navigate('/configure');
     }
     const handleHome = () => {

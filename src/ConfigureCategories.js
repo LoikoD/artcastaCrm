@@ -66,7 +66,7 @@ function ConfigureCategories() {
         dispatch(openConfCategory(category)).then(() => {
             dispatch(setLoadingState(0));
             navigate('/configure/edit_category');
-        })
+        });
     };
 
     const handleAdd = () => {
@@ -75,7 +75,7 @@ function ConfigureCategories() {
         dispatch(openConfCategory({})).then(() => {
             dispatch(setLoadingState(0));
             navigate('/configure/add_category');
-        })
+        });
     };
 
     const handleOpenCategory = (category) => {
@@ -85,7 +85,7 @@ function ConfigureCategories() {
             dispatch(openConfCategory(category)).then(() => {
                 dispatch(setLoadingState(0));
                 navigate('/configure/tables');
-            })
+            });
         });
     };
 
