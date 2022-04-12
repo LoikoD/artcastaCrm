@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLoadingState, updateTables } from './redux/actions';
+import { deleteTable, openConfTable, setLoadingState, updateTables } from './redux/actions';
 import './styles/Configure.css';
 
 function ConfigureTables() {
@@ -60,11 +60,30 @@ function ConfigureTables() {
 
     const handleDelete = (table) => {
         console.log('deleting table: ', table);
+        dispatch(setLoadingState(1));
+        dispatch(deleteTable(table)).then((result) => {
+            console.log(result);
+            dispatch(setLoadingState(0));
+        })
     }
 
     const handleEdit = (table) => {
         console.log('editing table: ', table);
+        dispatch(setLoadingState(1));
+        dispatch(openConfTable(table)).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/edit_table');
+        });
     }
+
+    const handleAdd = () => {
+        console.log('adding table');
+        dispatch(setLoadingState(1));
+        dispatch(openConfTable({})).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/add_table');
+        });
+    };
 
     const handleOpenTable = (table) => {
         console.log('open table: ', table);
@@ -80,7 +99,7 @@ function ConfigureTables() {
 
     useEffect(() => {
         setTables(allTables.filter(table => table.CategoryId === confCategory?.CategoryId));
-    }, [allTables]);
+    }, [allTables, confCategory?.CategoryId]);
 
     return (
         <div className='conf-page'>
@@ -128,7 +147,8 @@ function ConfigureTables() {
                 <div className='conf-bottom-btn-block'>
                     <button
                         className='conf-btn add-conf-btn'
-                    >Добавить категорию</button>
+                        onClick={() => handleAdd()}
+                    >Создать таблицу</button>
                     <button
                         className='conf-btn back-conf-btn'
                         onClick={() => handleBack()}
