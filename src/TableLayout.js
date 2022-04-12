@@ -20,6 +20,11 @@ function Home() {
         const {navigationReducer} = state;
         return navigationReducer.currentCategory;
     });
+    
+    const tables = useSelector(state => {
+        const {navigationReducer} = state;
+        return navigationReducer.tables;
+    });
     const [tablesLoading, setTablesLoading] = useState(1);
     
 
@@ -32,7 +37,8 @@ function Home() {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {
             setTablesLoading(0);
         }
-    }, [currentTable]);
+    }, [currentTable, tables]);
+
 
     return (
         <div>

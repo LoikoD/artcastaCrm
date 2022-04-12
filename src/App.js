@@ -12,10 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TablePage from './TablePage';
-import './styles/App.css';
 import { ViewMods } from './redux/enums';
 import ConfigureTables from './ConfigureTables';
 import ViewCategory from './ViewCategory';
+import './styles/App.css';
 
 function App(props) {
 
@@ -34,7 +34,7 @@ function App(props) {
   });
 
   useEffect(() => {
-    const redirectNames = ['/view_row', '/add_row', '/configure/tables', '/configure/view_category', '/configure/add_category']
+    const redirectNames = ['/view_row', '/add_row', '/configure/tables', '/configure/edit_category']
     if (redirectNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
     }

@@ -16,7 +16,7 @@ export const navigationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 categories: action.categories,
-                currentCategory: (window.location.pathname === '/' && Object.keys(state.currentCategory).length === 0 && action.categories.length > 0) ? action.categories[0] : state.currentCategory
+                currentCategory: (window.location.pathname === '/' && state?.currentCategory && Object.keys(state.currentCategory).length === 0 && action.categories.length > 0) ? action.categories[0] : state.currentCategory
                 // currentCategory: action.categories.length > 0 ? action.categories[0] : {}
             }
         case TABLES_LOAD:

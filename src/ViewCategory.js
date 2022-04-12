@@ -61,6 +61,10 @@ function ViewCategory(props) {
             setCategory(generateNewCategory());
         }
     }, [confCategory]);
+    
+    useEffect(() => {
+        dispatch(setLoadingState(0));
+    }, []);
 
     return (
         <div className='conf-page'>
