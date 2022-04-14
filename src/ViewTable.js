@@ -83,7 +83,7 @@ function ViewTable(props) {
 
     useEffect(() => {
         dispatch(setLoadingState(0));
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className='conf-page'>

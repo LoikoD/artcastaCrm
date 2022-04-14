@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from './redux/actions';
 import axios from 'axios'
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -17,19 +17,19 @@ function Login() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [show, setShow] = useState(0);
+    // const [show, setShow] = useState(0);
 
-    const loggedIn = useSelector(state => {
-        const {authReducer} = state;
-        return authReducer.loggedIn;
-    });
+    // const loggedIn = useSelector(state => {
+    //     const {authReducer} = state;
+    //     return authReducer.loggedIn;
+    // });
 
-    useEffect(() => {
-        if (loggedIn === 1) {
-            navigate('/');
-        }
-        setShow(1);
-    }, []);
+    // useEffect(() => {
+    //     if (loggedIn === 1) {
+    //         navigate('/');
+    //     }
+    //     setShow(1);
+    // }, [loggedIn]);
 
     useEffect(() => {
         setErrMsg('');
@@ -65,7 +65,7 @@ function Login() {
     }
 
     return (
-        show === 1 ?
+      //  show === 1 ?
             <div className='login'>
                 <form className='login-form' onSubmit={(e) => handleLogin(e)}>
                     <h1>ARTCasta</h1>
@@ -87,7 +87,7 @@ function Login() {
                 </form>
                 <p className={errMsg ? 'errmsg' : 'offscreen'}>{errMsg}</p>
             </div>
-        : <></>
+  //      : <></>
     );
 };
 

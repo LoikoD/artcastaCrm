@@ -45,7 +45,7 @@ function App(props) {
     }
 
     dispatch(tryLogin());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (firstLoad === 0) {

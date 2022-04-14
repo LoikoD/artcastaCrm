@@ -32,7 +32,7 @@ function TableNavigation() {
             setSelectedTable(currentTable);
             dispatch(setLoadingState(0));
         }
-    }, [currentTable]);
+    }, [currentTable, dispatch]);
 
     return(
         <>

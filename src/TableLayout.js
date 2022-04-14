@@ -31,7 +31,7 @@ function Home() {
     useEffect(() => {
         setTablesLoading(1);
         dispatch(tablesLoad());
-    }, [currentCategory]);
+    }, [currentCategory, dispatch]);
 
     useEffect(() => {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {

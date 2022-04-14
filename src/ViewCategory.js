@@ -23,7 +23,7 @@ function ViewCategory(props) {
 
     const handleChangeInput = (value) => {
         setCategory({ ...category, CategoryName: value });
-    }
+    };
 
     const handleSave = async () => {
 
@@ -64,7 +64,7 @@ function ViewCategory(props) {
     
     useEffect(() => {
         dispatch(setLoadingState(0));
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className='conf-page'>

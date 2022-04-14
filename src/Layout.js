@@ -25,7 +25,7 @@ function Layout() {
     });
     useEffect(() => {
         dispatch(categoriesLoad());
-    }, []);
+    }, [dispatch]);
 
     const handleLogout = () => {
         dispatch(logout());

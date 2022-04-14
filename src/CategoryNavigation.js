@@ -49,7 +49,7 @@ function CategoryNavigation(props) {
         if (JSON.stringify(currentTable) !== JSON.stringify({})) {
             dispatch(setLoadingState(0));
         }
-    }, [currentTable]);
+    }, [currentTable, dispatch]);
 
     return (
         <div className='bloc-tabs'>
