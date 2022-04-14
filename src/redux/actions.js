@@ -177,7 +177,7 @@ export function updateCategories(categories) {
     return async dispatch => {
         try {
             await axiosPrivate.put(`category`, categories);
-            
+
             dispatch({
                 type: UPDATE_CATEGORIES,
                 categories
@@ -193,7 +193,7 @@ export function updateTables(tables) {
     return async dispatch => {
         try {
             await axiosPrivate.put(`table`, tables);
-            
+
             dispatch(tablesLoad());
             return 1;
         } catch (error) {
@@ -224,7 +224,7 @@ export function deleteCategory(category) {
     return async dispatch => {
         try {
             await axiosPrivate.delete(`category/${category.CategoryId}`);
-            
+
             dispatch(categoriesLoad());
             return 1;
         } catch (error) {
@@ -237,7 +237,7 @@ export function updateCategory(category) {
     return async dispatch => {
         try {
             await axiosPrivate.put(`category/${category.CategoryId}`, category);
-            
+
             dispatch(categoriesLoad());
             return 1;
         } catch (error) {
@@ -250,7 +250,7 @@ export function createCategory(category) {
     return async dispatch => {
         try {
             await axiosPrivate.post(`category`, category);
-            
+
             dispatch(categoriesLoad());
             return 1;
         } catch (error) {
@@ -263,7 +263,7 @@ export function updateTable(table) {
     return async dispatch => {
         try {
             await axiosPrivate.put(`table/${table.TableId}`, table);
-            
+
             dispatch(tablesLoad());
             return 1;
         } catch (error) {
@@ -276,7 +276,7 @@ export function createTable(table) {
     return async dispatch => {
         try {
             await axiosPrivate.post(`table`, table);
-            
+
             dispatch(tablesLoad());
             return 1;
         } catch (error) {
@@ -289,12 +289,25 @@ export function deleteTable(table) {
     return async dispatch => {
         try {
             await axiosPrivate.delete(`table/${table.TableId}`);
-            
+
             dispatch(tablesLoad());
             return 1;
         } catch (error) {
             console.log(error);
             console.log(error.message);
+            return 0;
+        }
+    }
+}
+
+export function updateAttributes(attrs) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.put(`table/attribute`, attrs);
+
+            dispatch(tablesLoad());
+            return 1;
+        } catch (error) {
             return 0;
         }
     }

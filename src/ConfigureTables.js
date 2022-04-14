@@ -87,6 +87,11 @@ function ConfigureTables() {
 
     const handleOpenTable = (table) => {
         console.log('open table: ', table);
+        dispatch(setLoadingState(1));
+        dispatch(openConfTable(table)).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/attributes');
+        });
     }
 
     const handleBack = () => {
