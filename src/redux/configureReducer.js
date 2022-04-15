@@ -15,6 +15,7 @@ export const configureReducer = (state = initialState, action) => {
                 confCategory: action.category
             }
         case OPEN_CONF_TABLE:
+            console.log("OPEN_CONF_TABLE table: ", action.table);
             return {
                 ...state,
                 confTable: action.table

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteTable, openConfAttribute, openConfTable, setLoadingState, updateAttributes, updateTables } from './redux/actions';
+import { openConfAttribute, setLoadingState, updateAttributes } from './redux/actions';
 import './styles/Configure.css';
 
 function ConfigureAttributes() {
@@ -13,7 +13,7 @@ function ConfigureAttributes() {
         const { configureReducer } = state;
         return configureReducer.confTable;
     });
-    
+
     const allTables = useSelector(state => {
         const { navigationReducer } = state;
         return navigationReducer.allTables;
@@ -24,7 +24,7 @@ function ConfigureAttributes() {
     );
 
     const [table, setTable] = useState(allTables.find(table => table.TableId === confTable.TableId));
-    const [sortedAttrs, setSortedAttrs] = useState([ ...table.Attributes ].sort((a, b) => sortByOrd(a, b)));
+    const [sortedAttrs, setSortedAttrs] = useState([...table.Attributes].sort((a, b) => sortByOrd(a, b)));
 
 
     const handleMoveUp = async (itemOrder) => {
@@ -94,7 +94,7 @@ function ConfigureAttributes() {
     }, [allTables, confTable.TableId]);
 
     useEffect(() => {
-        setSortedAttrs([ ...table.Attributes ].sort((a, b) => sortByOrd(a, b)));
+        setSortedAttrs([...table.Attributes].sort((a, b) => sortByOrd(a, b)));
     }, [table.Attributes]);
 
     return (
@@ -105,38 +105,38 @@ function ConfigureAttributes() {
                     <div>
                         {sortedAttrs.map(attr =>
                             attr.PkFlag === 1 ? null :
-                            <div key={attr.AttrId} className='conf-block'>
+                                <div key={attr.AttrId} className='conf-block'>
 
-                                <div className='conf-cat-name-block'>
-                                    <button
-                                        className='conf-move-arrow'
-                                        onClick={() => handleMoveUp(attr.Ord)}
-                                        disabled={attr.Ord === 1 ? true : false} >
-                                        ↑
-                                    </button >
-                                    <button
-                                        className='conf-move-arrow'
-                                        onClick={() => handleMoveDown(attr.Ord)}
-                                        disabled={attr.Ord === sortedAttrs.length ? true : false} >
-                                        ↓
-                                    </button >
-                                    <div className='conf-name-attr'>
-                                        <div>{attr.Ord}.&nbsp;</div>
-                                        <div>{attr.AttrName}</div>
+                                    <div className='conf-cat-name-block'>
+                                        <button
+                                            className='conf-move-arrow'
+                                            onClick={() => handleMoveUp(attr.Ord)}
+                                            disabled={attr.Ord === 1 ? true : false} >
+                                            ↑
+                                        </button >
+                                        <button
+                                            className='conf-move-arrow'
+                                            onClick={() => handleMoveDown(attr.Ord)}
+                                            disabled={attr.Ord === sortedAttrs.length ? true : false} >
+                                            ↓
+                                        </button >
+                                        <div className='conf-name-attr'>
+                                            <div>{attr.Ord}.&nbsp;</div>
+                                            <div>{attr.AttrName}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className='conf-btn-block'>
+                                        <button
+                                            className='conf-btn edit-conf-btn'
+                                            onClick={() => handleEdit(attr)}
+                                        >Редактировать</button>
+                                        <button
+                                            className='conf-btn delete-conf-btn'
+                                            onClick={() => window.confirm('Вы действительно хотите удалить атрибут?') ? handleDelete(attr) : null}
+                                        >Удалить</button>
                                     </div>
                                 </div>
-
-                                <div className='conf-btn-block'>
-                                    <button
-                                        className='conf-btn edit-conf-btn'
-                                        onClick={() => handleEdit(attr)}
-                                    >Редактировать</button>
-                                    <button
-                                        className='conf-btn delete-conf-btn'
-                                        onClick={() => window.confirm('Вы действительно хотите удалить атрибут?') ? handleDelete(attr) : null}
-                                    >Удалить</button>
-                                </div>
-                            </div>
                         )}
                     </div>
                     : <div className='conf-no-data'>У данной таблицы еще нет атрибутов.</div>

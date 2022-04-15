@@ -3,7 +3,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Case, Switch } from './helpers/Switch';
-import { createTable, setLoadingState, updateTable } from './redux/actions';
+import { createAttribute, setLoadingState, updateAttribute } from './redux/actions';
 import { ViewMods } from './redux/enums';
 import './styles/Configure.css';
 
@@ -37,7 +37,7 @@ function ViewAttribute(props) {
         return navigationReducer.allTables;
     });
 
-    const [attr, setAttr] = useState(props.mode === ViewMods.VIEW ? { ...confAttr } : { AttrName: "", AttrTypeId: 1, AttrTypeProp1: null, AttrTypeProp2: null, TableId: confTable.TalbeId });
+    const [attr, setAttr] = useState(props.mode === ViewMods.VIEW ? { ...confAttr } : { AttrName: "", AttrTypeId: 1, AttrTypeProp1: 100, AttrTypeProp2: null, TableId: confTable.TableId });
     const [typeChanged, setTypeChanged] = useState(props.mode === ViewMods.VIEW ? false : true);
     const [joinTablesPool, setJoinTablesPool] = useState(allTables.filter(t => t.TableId !== confTable.TableId));
     const [joinAttrsPool, setJoinAttrsPool] = useState(joinTablesPool.find(t => t.TableId === attr.AttrTypeProp1)?.Attributes);
@@ -57,33 +57,33 @@ function ViewAttribute(props) {
                 setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: null, AttrTypeProp2: null });
                 break;
             case "int":
-                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: "", AttrTypeProp2: "" });
+                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: null, AttrTypeProp2: null });
                 break;
             case "decimal":
-                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: "15", AttrTypeProp2: "2" });
+                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: 15, AttrTypeProp2: 2 });
                 break;
             case "date":
-                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: "", AttrTypeProp2: "" });
+                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: null, AttrTypeProp2: null });
                 break;
             case "datetime2":
-                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: "", AttrTypeProp2: "" });
+                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: null, AttrTypeProp2: null });
                 break;
             case "join":
                 setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: joinTablesPool[0].TableId, AttrTypeProp2: null });
                 break;
             default:
                 console.log("ViewAttribute > handleInputAttrType > Error: 'cannot be reached'");
-                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: "", AttrTypeProp2: "" });
+                setAttr({ ...attr, AttrTypeId: attrType.AttrTypeId, AttrTypeProp1: null, AttrTypeProp2: null });
                 break;
         }
     }
 
     const handleInputProp1 = (value) => {
-        setAttr({ ...attr, AttrTypeProp1: value });
+        setAttr({ ...attr, AttrTypeProp1: Number(value) });
     }
 
     const handleInputProp2 = (value) => {
-        setAttr({ ...attr, AttrTypeProp2: value });
+        setAttr({ ...attr, AttrTypeProp2: Number(value) });
     }
 
     const handleSave = async () => {
@@ -127,6 +127,20 @@ function ViewAttribute(props) {
                     return;
                 }
                 break;
+            case "join":
+                if (attr.AttrTypeProp1 === null) {
+                    // TODO: Выводить ошибку
+                    console.log("Таблица для присоединения не может быть пустой");
+                    dispatch(setLoadingState(0));
+                    return;
+                }
+                if (attr.AttrTypeProp2 === null) {
+                    // TODO: Выводить ошибку
+                    console.log("Атрибут таблицы присоединения не может быть пустым");
+                    dispatch(setLoadingState(0));
+                    return;
+                }
+                break;
             default:
                 break;
         }
@@ -135,23 +149,21 @@ function ViewAttribute(props) {
 
         // TODO: Надо обрабатывать ошибки (result === 1, если все ок, но это не точно) и выводить описания ошибок на экран
         if (props.mode === ViewMods.VIEW) {
-            // update attr...
-            console.log('updating attr...');
-            // dispatch(updateAttr(attr)).then((result) => {
-            //     console.log(result);
-            //     dispatch(setLoadingState(0));
-            // setTypeChanged(false);
-            //     navigate('/configure/attributes');
-            // });
+            console.log('updating attr: ', attr);
+            dispatch(updateAttribute(typeChanged, attr)).then((result) => {
+                console.log(result);
+                dispatch(setLoadingState(0));
+                setTypeChanged(false);
+                navigate('/configure/attributes');
+            });
         } else {
-            // create attr...
-            console.log('creating attr...');
-            // dispatch(createTable(attr)).then((result) => {
-            //     console.log(result);
-            //     dispatch(setLoadingState(0));
-            // setTypeChanged(false);
-            //     navigate('/configure/attributes');
-            // });
+            console.log('creating attr: ', attr);
+            dispatch(createAttribute(attr)).then((result) => {
+                console.log(result);
+                dispatch(setLoadingState(0));
+                setTypeChanged(false);
+                navigate('/configure/attributes');
+            });
         }
 
     }
@@ -161,16 +173,17 @@ function ViewAttribute(props) {
     }
 
     useEffect(() => {
+        dispatch(setLoadingState(0));
+    }, [dispatch]);
+
+    useEffect(() => {
         if (confAttr && JSON.stringify(confAttr) !== JSON.stringify({})) {
             setAttr({ ...confAttr });
         } else {
-            setAttr({ AttrName: "", AttrTypeId: 1, AttrTypeProp1: "", AttrTypeProp2: "", TableId: confTable.TalbeId });
+            setAttr({ AttrName: "", AttrTypeId: 1, AttrTypeProp1: 100, AttrTypeProp2: null, TableId: confTable.TableId });
         }
-    }, [confAttr, confAttr.TalbeId]);
+    }, [confAttr, confTable.TableId]);
 
-    useEffect(() => {
-        dispatch(setLoadingState(0));
-    }, [dispatch]);
 
     useEffect(() => {
         setJoinTablesPool(allTables.filter(t => t.TableId !== confTable.TableId));
@@ -233,7 +246,7 @@ function ViewAttribute(props) {
                                         type='text'
                                         className='str-value-input'
                                         value={attr.AttrTypeProp1}
-                                        onChange={(e) => handleInputProp1(e.target.value)}
+                                        onChange={(e) => typeChanged ? handleInputProp1(e.target.value) : (window.confirm('Внимание! При изменении этого параметра, данные в этом столбце будут потеряны. Продолжить?') ? handleInputProp1(e.target.value) : null)}
                                     />
                                 </div>
                             </div>
@@ -246,7 +259,7 @@ function ViewAttribute(props) {
                                         type='text'
                                         className='str-value-input'
                                         value={attr.AttrTypeProp1}
-                                        onChange={(e) => handleInputProp1(e.target.value)}
+                                        onChange={(e) => typeChanged ? handleInputProp1(e.target.value) : (window.confirm('Внимание! При изменении этого параметра, данные в этом столбце будут потеряны. Продолжить?') ? handleInputProp1(e.target.value) : null)}
                                     />
                                 </div>
                             </div>
@@ -257,7 +270,7 @@ function ViewAttribute(props) {
                                         type='text'
                                         className='str-value-input'
                                         value={attr.AttrTypeProp2}
-                                        onChange={(e) => handleInputProp2(e.target.value)}
+                                        onChange={(e) => typeChanged ? handleInputProp2(e.target.value) : (window.confirm('Внимание! При изменении этого параметра, данные в этом столбце будут потеряны. Продолжить?') ? handleInputProp2(e.target.value) : null)}
                                     />
                                 </div>
                             </div>
@@ -270,7 +283,7 @@ function ViewAttribute(props) {
                                         {joinTablesPool.map((table, index) =>
                                             <Dropdown.Item
                                                 key={index}
-                                                onClick={() => handleInputProp1(table.TableId)}
+                                                onClick={() => typeChanged ? handleInputProp1(table.TableId) : (window.confirm('Внимание! При изменении этого параметра, данные в этом столбце будут потеряны. Продолжить?') ? handleInputProp1(table.TableId) : null)}
                                                 active={attr.AttrTypeProp1 === table.TableId}
                                             >{table.TableName}
                                             </Dropdown.Item>
@@ -285,7 +298,7 @@ function ViewAttribute(props) {
                                         {joinAttrsPool?.map((a, index) =>
                                             <Dropdown.Item
                                                 key={index}
-                                                onClick={() => handleInputProp2(a.AttrId)}
+                                                onClick={() => typeChanged ? handleInputProp2(a.AttrId) : (window.confirm('Внимание! При изменении этого параметра, данные в этом столбце будут потеряны. Продолжить?') ? handleInputProp2(a.AttrId) : null)}
                                                 active={attr.AttrTypeProp2 === a.AttrId}
                                             >{a.AttrName}
                                             </Dropdown.Item>
