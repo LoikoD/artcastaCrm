@@ -26,6 +26,14 @@ function TablePage() {
         const { navigationReducer } = state;
         return navigationReducer.tables;
     });
+    const allTables = useSelector(state => {
+        const { navigationReducer } = state;
+        return navigationReducer.allTables;
+    });
+    const attrTypes = useSelector(state => {
+        const { configureReducer } = state;
+        return configureReducer.attrTypes;
+    });
 
     const [sortedData, setSortedData] = useState(currentTable?.Data);
     const [sortInfo, setSortInfo] = useState({ sortAttr: "", sortDirection: SortDirection.NONE });
@@ -57,6 +65,15 @@ function TablePage() {
             setSortInfo({ sortAttr: attrName, sortDirection: SortDirection.DOWN })
         }
     };
+
+    const getJoinAttr = (id, tableId, attrId) => {
+        const joinTable = allTables.find(t => t.TableId === tableId);
+        const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
+        const selectAttr = joinTable.Attributes.find(a => a.AttrId === attrId);
+        const row = joinTable.Data.find(r => r[pkAttr.SystemAttrName] === id);
+        const value = row[selectAttr.SystemAttrName];
+        return value;
+    }
 
     useEffect(() => {
         setSortedData(currentTable?.Data);
@@ -91,7 +108,10 @@ function TablePage() {
                                         {row && currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
                                             attr.PkFlag === 0 &&
                                             <td key={attr.AttrId} className='attr-cell'>
-                                                {attr.AttrTypeName === 'связь' ? row[attr.AttrTypeProp2] : row[attr.SystemAttrName]}
+                                                {attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName === 'join'
+                                                    ? getJoinAttr(row[attr.SystemAttrName], attr.AttrTypeProp1, attr.AttrTypeProp2)
+                                                    : row[attr.SystemAttrName]
+                                                }
                                             </td>
                                         )}
                                     </tr>)}

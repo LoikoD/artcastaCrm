@@ -20,6 +20,10 @@ function ViewRow(props) {
     const { navigationReducer } = state;
     return navigationReducer.currentTable;
   });
+  const attrTypes = useSelector(state => {
+    const { configureReducer } = state;
+    return configureReducer.attrTypes;
+  });
 
   const generateNewRow = () => {
     let emptyRow = {};
@@ -112,13 +116,13 @@ function ViewRow(props) {
             <div key={attr.AttrId} className='attr'>
               <div className='attr-name'>{attr.AttrName}:</div>
               {/* TODO: Добавить кейсы для всех типов атрибутов  */}
-              <Switch expression={attr.SystemAttrTypeName}>
-                <Case value='join'>
+              <Switch expression={attr.AttrTypeId}>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'join').AttrTypeId}>
                   <div className='attr-value'>
                     <h6>Поле типа 'связь'</h6>
                   </div>
                 </Case>
-                <Case value='varchar'>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'varchar').AttrTypeId}>
                   <div className='attr-value'>
                     <input
                       type='text'
