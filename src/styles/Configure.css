@@ -10,6 +10,7 @@
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
+    max-width: calc(100% - 10px);
     min-width: 40%;
 }
 
@@ -98,6 +99,14 @@
     text-underline-offset: 2px;
 }
 
+.conf-name-attr {
+    font-weight: bold;
+    margin-left: 5px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
 .conf-move-arrow {
     padding: 0px 5px;
     margin-right: 5px;
@@ -128,20 +137,21 @@ button[disabled] {
     margin-bottom: 10px;
     justify-content: center;
     align-items: center;
+    max-width: 800px;
 }
 
 .conf-edit-name {
     font-size: large;
     display: flex;
     justify-content: flex-end;
-    width: 60%;
+    width: 25%;
     text-align: right;
 }
 
 .conf-edit-value {
     display: flex;
     justify-content: flex-start;
-    width: 80%;
+    width: 65%;
 }
 
 .str-value-input {
@@ -151,8 +161,14 @@ button[disabled] {
     width: 100%;
 }
 
+.str-value-description {
+    margin-left: 20px;
+    padding: 2px 5px;
+    width: 100%;
+}
+
 .btn-conf-dropdown {
-    padding: 5px 5px;
+    padding: 5px 0px;
     border: none;
     font-size: 14px;
     border-radius: 3px;

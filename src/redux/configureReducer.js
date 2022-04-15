@@ -1,8 +1,10 @@
-import { OPEN_CONF_CATEGORY, OPEN_CONF_TABLE } from './types'
+import { LOAD_ATTR_TYPES, OPEN_CONF_ATTR, OPEN_CONF_CATEGORY, OPEN_CONF_TABLE } from './types'
 
 const initialState = {
     confCategory: {},
-    confTable: {}
+    confTable: {},
+    confAttr: {},
+    attrTypes: []
 }
 
 export const configureReducer = (state = initialState, action) => {
@@ -16,6 +18,16 @@ export const configureReducer = (state = initialState, action) => {
             return {
                 ...state,
                 confTable: action.table
+            }
+        case OPEN_CONF_ATTR:
+            return {
+                ...state,
+                confAttr: action.attr
+            }
+        case LOAD_ATTR_TYPES:
+            return {
+                ...state,
+                attrTypes: action.attrTypes
             }
         default:
             return state;

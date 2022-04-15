@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteTable, openConfTable, setLoadingState, updateAttributes, updateTables } from './redux/actions';
+import { deleteTable, openConfAttribute, openConfTable, setLoadingState, updateAttributes, updateTables } from './redux/actions';
 import './styles/Configure.css';
 
 function ConfigureAttributes() {
@@ -69,20 +69,20 @@ function ConfigureAttributes() {
 
     const handleEdit = (attr) => {
         console.log('editing attribute: ', attr);
-        // dispatch(setLoadingState(1));
-        // dispatch(openConfAttr(attr)).then(() => {
-        //     dispatch(setLoadingState(0));
-        //     navigate('/configure/edit_table');
-        // });
+        dispatch(setLoadingState(1));
+        dispatch(openConfAttribute(attr)).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/edit_attribute');
+        });
     }
 
     const handleAdd = () => {
         console.log('adding attribute');
-        // dispatch(setLoadingState(1));
-        // dispatch(openConfAttr({})).then(() => {
-        //     dispatch(setLoadingState(0));
-        //     navigate('/configure/add_table');
-        // });
+        dispatch(setLoadingState(1));
+        dispatch(openConfAttribute({})).then(() => {
+            dispatch(setLoadingState(0));
+            navigate('/configure/add_attribute');
+        });
     };
 
     const handleBack = () => {
@@ -120,7 +120,7 @@ function ConfigureAttributes() {
                                         disabled={attr.Ord === sortedAttrs.length ? true : false} >
                                         ↓
                                     </button >
-                                    <div className='conf-name'>
+                                    <div className='conf-name-attr'>
                                         <div>{attr.Ord}.&nbsp;</div>
                                         <div>{attr.AttrName}</div>
                                     </div>

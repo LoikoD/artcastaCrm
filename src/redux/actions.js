@@ -1,4 +1,4 @@
-import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU, UPDATE_CATEGORIES, OPEN_CONF_CATEGORY, OPEN_CONF_TABLE } from "./types";
+import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU, UPDATE_CATEGORIES, OPEN_CONF_CATEGORY, OPEN_CONF_TABLE, OPEN_CONF_ATTR, LOAD_ATTR_TYPES } from "./types";
 import { axiosPrivate } from "../api/axios";
 
 
@@ -309,6 +309,29 @@ export function updateAttributes(attrs) {
             return 1;
         } catch (error) {
             return 0;
+        }
+    }
+}
+
+export function openConfAttribute(attr) {
+    return async dispatch => {
+        dispatch({
+            type: OPEN_CONF_ATTR,
+            attr: attr
+        });
+    }
+}
+
+export function loadAttrTypes() {
+    return async dispatch => {
+        try {
+            const { data } = await axiosPrivate.get('table/attribute/type');
+            dispatch({
+                type: LOAD_ATTR_TYPES,
+                attrTypes: data
+            });
+        } catch (error) {
+            console.log("error loading attr types");
         }
     }
 }

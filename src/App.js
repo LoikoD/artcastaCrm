@@ -18,6 +18,7 @@ import ViewCategory from './ViewCategory';
 import './styles/App.css';
 import ViewTable from './ViewTable';
 import ConfigureAttributes from './ConfigureAttributes';
+import ViewAttribute from './ViewAttribute';
 
 function App(props) {
 
@@ -37,7 +38,7 @@ function App(props) {
 
   useEffect(() => {
     const redirectToHomeNames = ['/view_row', '/add_row'];
-    const redirectToConfNames = ['/configure/tables', '/configure/edit_category', '/configure/edit_table', '/configure/add_table', '/configure/attributes'];
+    const redirectToConfNames = ['/configure/tables', '/configure/edit_category', '/configure/edit_table', '/configure/add_table', '/configure/attributes', '/configure/edit_attribute', '/configure/add_attribute'];
     if (redirectToHomeNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
     } else if (redirectToConfNames.includes(window.location.pathname))
@@ -76,6 +77,8 @@ function App(props) {
               <Route exact path="/configure/edit_table" element={<ViewTable mode={ViewMods.VIEW} />} />
               <Route exact path="/configure/add_table" element={<ViewTable mode={ViewMods.ADD} />} />
               <Route exact path="/configure/attributes" element={<ConfigureAttributes />} />
+              <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
+              <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
               <Route exact path="/users" element={<UsersSettings />} />
               <Route exact path="/roles" element={<RolesSettings />} />
             </Route>
