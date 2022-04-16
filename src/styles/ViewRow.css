@@ -80,7 +80,7 @@
 .vr-edit-value {
     display: flex;
     justify-content: flex-start;
-    width: 65%;
+    width: 75%;
 }
 .vr-value-input {
     margin-left: 20px;
@@ -89,15 +89,14 @@
     width: 100%;
 }
 
-
-
 .btn-vr-dropdown {
-    padding: 5px 0px;
-    border: none;
-    font-size: 14px;
-    border-radius: 3px;
     margin-left: 20px;
+    border: 0;
+    padding: 5px 5px;
     width: 100%;
+    min-width: 10%;
+    font-size: 14px;
+    border-radius: 7px;
     background-color: #d9d2e9;
     color: black;
 }

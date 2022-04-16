@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import TextareaAutosize from 'react-textarea-autosize';
+import { DecimalInput, IntegerInput } from './helpers/CustomInputs';
 import { Case, Switch } from './helpers/Switch';
 import LoadingOverlay from './LoadingOverlay';
 import { addRow, deleteRow, openTable, saveRow, setLoadingState } from './redux/actions';
@@ -11,6 +14,9 @@ function ViewRow(props) {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const MAX_INT_NUMBER = 2147483647
+  const MIN_INT_NUMBER = -2147483648
 
   const currentRow = useSelector(state => {
     const { navigationReducer } = state;
@@ -24,12 +30,65 @@ function ViewRow(props) {
     const { configureReducer } = state;
     return configureReducer.attrTypes;
   });
+  const allTables = useSelector(state => {
+    const { navigationReducer } = state;
+    return navigationReducer.allTables;
+  });
+
+  const getJoinValue = (attr) => {
+
+    if (attrTypes.find(t => t.AttrTypeId === attr.AttrTypeId)?.SystemAttrTypeName !== "join") {
+      return "";
+    }
+    const joinTable = allTables.find(t => t.TableId === attr.AttrTypeProp1);
+    const pkAttr = joinTable?.Attributes.find(a => a.PkFlag === 1);
+    const selectAttr = joinTable?.Attributes.find(a => a.AttrId === attr.AttrTypeProp2);
+    const row = joinTable?.Data.find(r => r[[pkAttr.SystemAttrName]] === attrs[[attr.SystemAttrName]]);
+
+    return row ? row[[selectAttr.SystemAttrName]] : "";
+  }
+
+  const getJoinPkAttr = (tableId) => {
+    const joinTable = allTables.find(t => t.TableId === tableId);
+    const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
+    return pkAttr;
+  }
+
+
+  const getJoinTableData = (attr) => {
+    if (attrTypes.find(t => t.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName !== "join") {
+      return null;
+    }
+    const joinTable = allTables.find(t => t.TableId === attr.AttrTypeProp1);
+    return joinTable?.Data;
+  }
+
+  const getJoinSelectAttr = (attr) => {
+    if (attrTypes.find(t => t.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName !== "join") {
+      return null;
+    }
+    const joinTable = allTables.find(t => t.TableId === attr.AttrTypeProp1);
+    const selectAttr = joinTable.Attributes.find(a => a.AttrId === attr.AttrTypeProp2);
+    return selectAttr;
+  }
+
 
   const generateNewRow = () => {
     let emptyRow = {};
     currentTable.Attributes.forEach(attr => {
-      // Скорее всего для разных типов атрибутов нужно задавать разные пустые значения. То есть для текстовых - пустая строка, для дат - возможно null и т.д.
-      emptyRow = { ...emptyRow, [attr.SystemAttrName]: '' };
+      switch (attrTypes.find(a => a.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName) {
+        case "int":
+        case "decimal":
+          emptyRow = { ...emptyRow, [attr.SystemAttrName]: 0 };
+          break;
+        case "join":
+          // emptyRow = { ...emptyRow, [attr.SystemAttrName]: getJoinTableData(attr)[0][getJoinPkAttr(attr.AttrTypeProp1).SystemAttrName] };
+          emptyRow = { ...emptyRow, [attr.SystemAttrName]: 0 };
+          break;
+        default:
+          emptyRow = { ...emptyRow, [attr.SystemAttrName]: '' };
+          break;
+      }
     });
     return emptyRow;
   }
@@ -40,6 +99,9 @@ function ViewRow(props) {
 
   const handleChangeInput = (attrName, value) => {
     setAttrs({ ...attrs, [attrName]: value })
+  }
+  const handleChangeInputNumber = (attrName, value) => {
+    setAttrs({ ...attrs, [attrName]: Number(value) })
   }
 
   const handleEditBtn = (e) => {
@@ -113,14 +175,19 @@ function ViewRow(props) {
   }
 
 
+
+  useEffect(() => {
+    console.log("attrs: ", attrs);
+  }, [attrs])
+
   return (
     <div className='vr-page'>
       <LoadingOverlay show={tablesLoading} />
       <div className='content-vr'>
         {props.mode === ViewMods.VIEW ? <h4 className='vr-header'>Редактирование данных ({currentTable.TableName})</h4> : <h4 className='vr-header'>Добавление строки ({currentTable.TableName})</h4>}
-        
+
         <div className='vr-btn-block'>
-        <button className='vr-btn secondary-vr-btn' onClick={(e) => handleBackBtn(e)}>Назад</button>
+          <button className='vr-btn secondary-vr-btn' onClick={(e) => handleBackBtn(e)}>Назад</button>
         </div>
 
         {currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
@@ -132,9 +199,6 @@ function ViewRow(props) {
 
             <div className='vr-edit-value'>
               <Switch expression={attr.AttrTypeId}>
-                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'join').AttrTypeId}>
-                  <h6>Поле типа 'связь'</h6>
-                </Case>
                 <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'varchar').AttrTypeId}>
                   <input
                     type='text'
@@ -144,6 +208,64 @@ function ViewRow(props) {
                     readOnly={isReadOnly}
                     maxLength={attr.AttrTypeProp1}
                   />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'text').AttrTypeId}>
+                  <TextareaAutosize
+                    className='vr-value-input'
+                    minRows={3}
+                    maxRows={6}
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
+                    readOnly={isReadOnly}
+                  />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'int').AttrTypeId}>
+                  <IntegerInput
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(value) => handleChangeInputNumber(attr.SystemAttrName, value)}
+                    readOnly={isReadOnly}
+                    max={MAX_INT_NUMBER}
+                    min={MIN_INT_NUMBER}
+                  />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'decimal').AttrTypeId}>
+                  <DecimalInput
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(value) => handleChangeInputNumber(attr.SystemAttrName, value)}
+                    readOnly={isReadOnly}
+                    precision={attr.AttrTypeProp1}
+                    scale={attr.AttrTypeProp2}
+                  />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'date').AttrTypeId}>
+                  <input
+                    type='date'
+                    className='vr-value-input'
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
+                    readOnly={isReadOnly}
+                  />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'datetime2').AttrTypeId}>
+                  <input
+                    type='datetime-local'
+                    className='vr-value-input'
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
+                    readOnly={isReadOnly}
+                  />
+                </Case>
+                <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'join').AttrTypeId}>
+                  <DropdownButton id="dropdown-basic-button" variant='vr-dropdown' title={getJoinValue(attr)}>
+                    {getJoinTableData(attr)?.map((r, index) =>
+                      <Dropdown.Item
+                        key={index}
+                        onClick={() => handleChangeInputNumber(attr.SystemAttrName, r[[getJoinPkAttr(attr.AttrTypeProp1).SystemAttrName]])}
+                        active={attrs[attr.SystemAttrName] === r[[getJoinPkAttr(attr.AttrTypeProp1).SystemAttrName]]}
+                      >{r[`${getJoinSelectAttr(attr).SystemAttrName}`]}
+                      </Dropdown.Item>
+                    )}
+                  </DropdownButton>
                 </Case>
                 <Case value='default'>
                   <h6>Неизвестный тип</h6>

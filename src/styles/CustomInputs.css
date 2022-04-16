@@ -1,0 +1,10 @@
+input.custom-input {
+    margin-left: 20px;
+    border: 0;
+    padding: 2px 5px;
+    width: 100%;
+}
+
+input.invalid-input:focus {
+    outline-color: red;
+}
