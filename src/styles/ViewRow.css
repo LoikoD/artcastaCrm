@@ -1,58 +1,103 @@
-.view-block {
-    width: 100%;
+.vr-page {
     height: 100%;
+}
+
+.content-vr {
     display: block;
+    margin: 20px auto auto auto;
+    width: fit-content;
+    background-color: #337ab7;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    max-width: calc(100% - 10px);
+    min-width: 75%;
+}
+
+.vr-header {
+    text-align: center;
+    color: white;
     margin-top: 10px;
+    margin-bottom: 25px;
 }
 
-.attr {
+.vr-btn-block {
     display: flex;
-    padding: 0;
-    min-width: 1em;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.attr-name {
+.vr-btn {
+    padding: 5px 5px;
+    border: none;
+    font-size: 14px;
+    border-radius: 7px;
+    cursor: pointer;
     font-weight: bold;
-    width: 20%;
-}
-
-.attr-value {
-    flex-grow: 1;
+    min-width: 10%;
     margin-left: 10px;
 }
 
-.attr-value-input {
+.primary-vr-btn {
+    background: #337ab7;
+    color: white;
+}
+
+.danger-vr-btn {
+    background: #b30a04;
+    color: white;
+}
+
+.good-vr-btn {
+    background: #a6da19;
+    color: black;
+}
+
+.secondary-vr-btn {
+    background: #d9d2e9;
+    color: black;
+}
+
+
+
+.vr-edit-block {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.vr-edit-name {
+    font-size: large;
+    display: flex;
+    justify-content: flex-end;
+    width: 25%;
+    text-align: right;
+}
+.vr-edit-value {
+    display: flex;
+    justify-content: flex-start;
+    width: 65%;
+}
+.vr-value-input {
+    margin-left: 20px;
     border: 0;
     padding: 2px 5px;
     width: 100%;
 }
 
-.def-btn {
-    margin-top: 20px;
-    margin-right: 10px;
-    padding: 5px 10px;
+
+
+.btn-vr-dropdown {
+    padding: 5px 0px;
     border: none;
     font-size: 14px;
     border-radius: 3px;
-    cursor: pointer;
-}
-
-.edit-btn {
-    background: #337ab7;
-    color: white;
-}
-
-.save-btn {
-    background: rgb(61, 218, 56);
+    margin-left: 20px;
+    width: 100%;
+    background-color: #d9d2e9;
     color: black;
-}
-
-.cancel-btn {
-    background: rgb(201, 201, 201);
-    color: black;
-}
-
-.delete-btn {
-    background: #b30a04;
-    color: white;
 }

@@ -55,6 +55,14 @@ function ViewRow(props) {
     setIsReadOnly(true);
   }
 
+  const handleBackBtn = (e) => {
+    e.preventDefault();
+
+    setAttrs(currentRow);
+    setIsReadOnly(true);
+    navigate('/');
+  }
+
   const handleSaveBtn = async (e) => {
     e.preventDefault();
 
@@ -106,51 +114,55 @@ function ViewRow(props) {
 
 
   return (
-    <div>
+    <div className='vr-page'>
       <LoadingOverlay show={tablesLoading} />
-      <div className='view-block'>
+      <div className='content-vr'>
+        {props.mode === ViewMods.VIEW ? <h4 className='vr-header'>Редактирование данных ({currentTable.TableName})</h4> : <h4 className='vr-header'>Добавление строки ({currentTable.TableName})</h4>}
+        
+        <div className='vr-btn-block'>
+        <button className='vr-btn secondary-vr-btn' onClick={(e) => handleBackBtn(e)}>Назад</button>
+        </div>
 
-        {
-          currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
-            attr.PkFlag === 0 &&
-            <div key={attr.AttrId} className='attr'>
-              <div className='attr-name'>{attr.AttrName}:</div>
-              {/* TODO: Добавить кейсы для всех типов атрибутов  */}
+        {currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
+          attr.PkFlag === 0 &&
+
+
+          <div className='vr-edit-block' key={attr.AttrId}>
+            <div className='vr-edit-name'>{attr.AttrName}:</div>
+
+            <div className='vr-edit-value'>
               <Switch expression={attr.AttrTypeId}>
                 <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'join').AttrTypeId}>
-                  <div className='attr-value'>
-                    <h6>Поле типа 'связь'</h6>
-                  </div>
+                  <h6>Поле типа 'связь'</h6>
                 </Case>
                 <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'varchar').AttrTypeId}>
-                  <div className='attr-value'>
-                    <input
-                      type='text'
-                      className='attr-value-input'
-                      value={attrs[attr.SystemAttrName]}
-                      onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
-                      readOnly={isReadOnly}
-                    />
-                  </div>
+                  <input
+                    type='text'
+                    className='vr-value-input'
+                    value={attrs[attr.SystemAttrName]}
+                    onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
+                    readOnly={isReadOnly}
+                    maxLength={attr.AttrTypeProp1}
+                  />
                 </Case>
                 <Case value='default'>
-                  <div className='attr-value'>
-                    <h6>Неизвестный тип</h6>
-                  </div>
+                  <h6>Неизвестный тип</h6>
                 </Case>
               </Switch>
             </div>
-          )
-        }
+          </div>
 
-        {isReadOnly ?
-          <button className='def-btn edit-btn' onClick={(e) => handleEditBtn(e)}>Редактировать</button>
-          : <>
-            <button className='def-btn save-btn' onClick={(e) => handleSaveBtn(e)}>Сохранить</button>
-            <button className='def-btn cancel-btn' onClick={(e) => handleCancelBtn(e)}>Отменить изменения</button>
-          </>
-        }
-        <button className='def-btn delete-btn' onClick={(e) => handleDeleteBtn(e)}>Удалить</button>
+        )}
+        <div className='vr-btn-block'>
+          {isReadOnly ?
+            <button className='vr-btn secondary-vr-btn' onClick={(e) => handleEditBtn(e)}>Редактировать</button>
+            : <>
+              <button className='vr-btn good-vr-btn' onClick={(e) => handleSaveBtn(e)}>Сохранить</button>
+              {props.mode === ViewMods.VIEW ? <button className='vr-btn secondary-vr-btn' onClick={(e) => handleCancelBtn(e)}>Отменить изменения</button> : <></>}
+            </>
+          }
+          <button className='vr-btn danger-vr-btn' onClick={(e) => handleDeleteBtn(e)}>{props.mode === ViewMods.VIEW ? "Удалить" : "Отмена"}</button>
+        </div>
       </div>
     </div>
   );
