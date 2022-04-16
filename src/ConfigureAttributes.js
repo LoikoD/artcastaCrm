@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { openConfAttribute, setLoadingState, updateAttributes } from './redux/actions';
+import { deleteAttribute, openConfAttribute, setLoadingState, updateAttributes } from './redux/actions';
 import './styles/Configure.css';
 
 function ConfigureAttributes() {
@@ -60,11 +60,23 @@ function ConfigureAttributes() {
 
     const handleDelete = (attr) => {
         console.log('deleting attribute: ', attr);
-        // dispatch(setLoadingState(1));
-        // dispatch(deleteAttribute(attr)).then((result) => {
-        //     console.log(result);
-        //     dispatch(setLoadingState(0));
-        // });
+        dispatch(setLoadingState(1));
+        dispatch(deleteAttribute(attr.AttrId)).then((result) => {
+            dispatch(setLoadingState(0));
+            switch (result) {
+                case 0: // success
+                    break;
+                case 409: // dependent attributes error
+                    window.alert("Чтобы удалить этот атрибут, сначала нужно удалить зависимые от него атрибуты");
+                    break;
+                case 500: // internal server error
+                    window.alert("Произошла ошибка во время выполнения запроса!");
+                    break;
+                default: // other error
+                    window.alert("Произошла неизвестная ошибка!");
+                    break;
+            };
+        });
     }
 
     const handleEdit = (attr) => {

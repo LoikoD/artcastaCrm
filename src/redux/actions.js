@@ -339,7 +339,7 @@ export function loadAttrTypes() {
 export function updateAttribute(typeChanged, attr) {
     return async dispatch => {
         try {
-            await axiosPrivate.put(`table/attribute/${attr.AttrId}`, {typeChanged: typeChanged, attribute: attr});
+            await axiosPrivate.put(`table/attribute/${attr.AttrId}`, { typeChanged: typeChanged, attribute: attr });
 
             dispatch(tablesLoad());
             return 1;
@@ -366,11 +366,10 @@ export function deleteAttribute(attrId) {
     return async dispatch => {
         try {
             await axiosPrivate.delete(`table/attribute/${attrId}`);
-
             dispatch(tablesLoad());
-            return 1;
-        } catch (error) {
             return 0;
+        } catch (error) {
+            return error.response.status;
         }
     }
 }
