@@ -67,12 +67,17 @@ function TablePage() {
     };
 
     const getJoinAttr = (id, tableId, attrId) => {
-        const joinTable = allTables.find(t => t.TableId === tableId);
-        const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
-        const selectAttr = joinTable.Attributes.find(a => a.AttrId === attrId);
-        const row = joinTable.Data.find(r => r[pkAttr.SystemAttrName] === id);
-        const value = row[selectAttr.SystemAttrName];
-        return value;
+        try {
+            const joinTable = allTables.find(t => t.TableId === tableId);
+            const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
+            const selectAttr = joinTable.Attributes.find(a => a.AttrId === attrId);
+            const row = joinTable.Data.find(r => r[pkAttr.SystemAttrName] === id);
+            const value = row[selectAttr.SystemAttrName];
+            return value;
+        } catch (error) {
+            //console.log("getJoinAttr > error: ", error);
+            return null;
+        }
     }
 
     useEffect(() => {
