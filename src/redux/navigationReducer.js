@@ -7,7 +7,7 @@ const initialState = {
     tables: [],
     currentTable: {},
     currentRow: {},
-    isLoading: 1
+    isLoading: 0
 }
 
 export const navigationReducer = (state = initialState, action) => {

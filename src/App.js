@@ -19,6 +19,7 @@ import './styles/App.css';
 import ViewTable from './ViewTable';
 import ConfigureAttributes from './ConfigureAttributes';
 import ViewAttribute from './ViewAttribute';
+import ConfigureSettings from './ConfigureSettings';
 
 function App(props) {
 
@@ -41,8 +42,7 @@ function App(props) {
     const redirectToConfNames = ['/configure/tables', '/configure/edit_category', '/configure/edit_table', '/configure/add_table', '/configure/attributes', '/configure/edit_attribute', '/configure/add_attribute'];
     if (redirectToHomeNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
-    } else if (redirectToConfNames.includes(window.location.pathname))
-    {
+    } else if (redirectToConfNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/configure');
     }
 
@@ -70,15 +70,17 @@ function App(props) {
               <Route exact path="/add_row" element={<ViewRow mode={ViewMods.ADD} />} />
             </Route>
             <Route element={<Settings />} >
-              <Route exact path="/configure" element={<ConfigureCategories />} />
-              <Route exact path="/configure/edit_category" element={<ViewCategory mode={ViewMods.VIEW} />} />
-              <Route exact path="/configure/add_category" element={<ViewCategory mode={ViewMods.ADD} />} />
-              <Route exact path="/configure/tables" element={<ConfigureTables />} />
-              <Route exact path="/configure/edit_table" element={<ViewTable mode={ViewMods.VIEW} />} />
-              <Route exact path="/configure/add_table" element={<ViewTable mode={ViewMods.ADD} />} />
-              <Route exact path="/configure/attributes" element={<ConfigureAttributes />} />
-              <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
-              <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
+              <Route element={<ConfigureSettings />} >
+                <Route exact path="/configure" element={<ConfigureCategories />} />
+                <Route exact path="/configure/edit_category" element={<ViewCategory mode={ViewMods.VIEW} />} />
+                <Route exact path="/configure/add_category" element={<ViewCategory mode={ViewMods.ADD} />} />
+                <Route exact path="/configure/tables" element={<ConfigureTables />} />
+                <Route exact path="/configure/edit_table" element={<ViewTable mode={ViewMods.VIEW} />} />
+                <Route exact path="/configure/add_table" element={<ViewTable mode={ViewMods.ADD} />} />
+                <Route exact path="/configure/attributes" element={<ConfigureAttributes />} />
+                <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
+                <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
+              </Route>
               <Route exact path="/users" element={<UsersSettings />} />
               <Route exact path="/roles" element={<RolesSettings />} />
             </Route>
