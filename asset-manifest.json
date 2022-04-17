@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/artcasta/static/css/main.e0998d2e.css",
+    "main.js": "/artcasta/static/js/main.96012250.js",
+    "static/js/787.b1ceba7c.chunk.js": "/artcasta/static/js/787.b1ceba7c.chunk.js",
+    "index.html": "/artcasta/index.html",
+    "main.e0998d2e.css.map": "/artcasta/static/css/main.e0998d2e.css.map",
+    "main.96012250.js.map": "/artcasta/static/js/main.96012250.js.map",
+    "787.b1ceba7c.chunk.js.map": "/artcasta/static/js/787.b1ceba7c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e0998d2e.css",
+    "static/js/main.96012250.js"
+  ]
+}
