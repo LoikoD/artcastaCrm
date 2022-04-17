@@ -82,8 +82,11 @@ function ViewRow(props) {
           emptyRow = { ...emptyRow, [attr.SystemAttrName]: 0 };
           break;
         case "join":
-          // emptyRow = { ...emptyRow, [attr.SystemAttrName]: getJoinTableData(attr)[0][getJoinPkAttr(attr.AttrTypeProp1).SystemAttrName] };
           emptyRow = { ...emptyRow, [attr.SystemAttrName]: 0 };
+          break;
+        case "date":
+        case "datetime2":
+          emptyRow = { ...emptyRow, [attr.SystemAttrName]: null };
           break;
         default:
           emptyRow = { ...emptyRow, [attr.SystemAttrName]: '' };
@@ -134,6 +137,7 @@ function ViewRow(props) {
     // TODO: Надо обрабатывать ошибки (result === 1, если все ок, но это не точно) и выводить описания ошибок на экран, возможно, не переключая режим isReadOnly
     if (props.mode === ViewMods.VIEW) {
       dispatch(saveRow(currentTable.TableId, attrs[currentTable.Attributes.find(attr => attr.PkFlag === 1).SystemAttrName], attrs)).then((result) => {
+        dispatch(openTable(currentTable));
         setTablesLoading(0);
         setIsReadOnly(true);
       });
@@ -174,7 +178,13 @@ function ViewRow(props) {
 
   }
 
+  const getDatePart = (attr) => {
+    if (attrTypes.find(t => t.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName !== "date") {
+      return null;
+    }
+    return attrs[attr.SystemAttrName] ? attrs[attr.SystemAttrName].split('T')[0] : "";
 
+  }
 
   useEffect(() => {
     console.log("attrs: ", attrs);
@@ -241,7 +251,7 @@ function ViewRow(props) {
                   <input
                     type='date'
                     className='vr-value-input'
-                    value={attrs[attr.SystemAttrName]}
+                    value={getDatePart(attr)}
                     onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
                     readOnly={isReadOnly}
                   />
@@ -250,13 +260,13 @@ function ViewRow(props) {
                   <input
                     type='datetime-local'
                     className='vr-value-input'
-                    value={attrs[attr.SystemAttrName]}
+                    value={attrs[attr.SystemAttrName] ? attrs[attr.SystemAttrName] : ""}
                     onChange={(e) => handleChangeInput(attr.SystemAttrName, e.target.value)}
                     readOnly={isReadOnly}
                   />
                 </Case>
                 <Case value={attrTypes.find(attr => attr.SystemAttrTypeName === 'join').AttrTypeId}>
-                  <DropdownButton id="dropdown-basic-button" variant='vr-dropdown' title={getJoinValue(attr)}>
+                  <DropdownButton id="dropdown-basic-button" variant='vr-dropdown' title={getJoinValue(attr)} disabled={isReadOnly}>
                     {getJoinTableData(attr)?.map((r, index) =>
                       <Dropdown.Item
                         key={index}

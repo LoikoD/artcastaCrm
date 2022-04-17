@@ -7,6 +7,7 @@ import LoadingOverlay from './LoadingOverlay';
 import './styles/Navigation.css';
 import './styles/TablePage.css';
 import { SortDirection } from './redux/enums';
+import { Case, Switch } from './helpers/Switch';
 
 function TablePage() {
 
@@ -92,7 +93,7 @@ function TablePage() {
             {JSON.stringify(currentTable) !== JSON.stringify({}) ?
                 tables.length > 0 ?
                     <div className='content-tabs'>
-                        <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button>
+                        {currentTable?.Attributes.some(a => a.PkFlag === 0) ? <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button> : <></>}
                         <Table className='custom-tbl' striped bordered hover >
                             <thead>
                                 <tr >
@@ -113,10 +114,32 @@ function TablePage() {
                                         {row && currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
                                             attr.PkFlag === 0 &&
                                             <td key={attr.AttrId} className='attr-cell'>
-                                                {attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName === 'join'
-                                                    ? getJoinAttr(row[attr.SystemAttrName], attr.AttrTypeProp1, attr.AttrTypeProp2)
-                                                    : row[attr.SystemAttrName]
-                                                }
+                                                <Switch expression={attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName}>
+                                                    <Case value='varchar'>
+                                                        {row[attr.SystemAttrName]}
+                                                    </Case>
+                                                    <Case value='text'>
+                                                        {row[attr.SystemAttrName]}
+                                                    </Case>
+                                                    <Case value='int'>
+                                                        {`${row[attr.SystemAttrName]}`}
+                                                    </Case>
+                                                    <Case value='decimal'>
+                                                        {row[attr.SystemAttrName]}
+                                                    </Case>
+                                                    <Case value='date'>
+                                                        {row[attr.SystemAttrName] ? new Date(row[attr.SystemAttrName]).toLocaleDateString() : row[attr.SystemAttrName]}
+                                                    </Case>
+                                                    <Case value='datetime2'>
+                                                        {row[attr.SystemAttrName] ? new Date(row[attr.SystemAttrName]).toLocaleString() : row[attr.SystemAttrName]}
+                                                    </Case>
+                                                    <Case value='join'>
+                                                        {getJoinAttr(row[attr.SystemAttrName], attr.AttrTypeProp1, attr.AttrTypeProp2)}
+                                                    </Case>
+                                                    <Case value='default'>
+                                                        <></>
+                                                    </Case>
+                                                </Switch>
                                             </td>
                                         )}
                                     </tr>)}

@@ -49,7 +49,7 @@ export const IntegerInput = ({ value, min, max, onChange, readOnly }) => {
 
 
 export const DecimalInput = ({ value, precision, scale, onChange, readOnly }) => {
-    const regexp = scale > 0 ? new RegExp(`^-?[0-9]{0,${precision}}(\\.[0-9]{0,${scale}})?$`) : new RegExp(`^-?[0-9]{0,${precision}}$`);
+    const regexp = scale > 0 ? new RegExp(`^-?[0-9]{0,${precision-scale}}(\\.[0-9]{0,${scale}})?$`) : new RegExp(`^-?[0-9]{0,${precision}}$`);
     const [internalValue, setInternalValue] = useState(value);
     const [valid, setValid] = useState(isValidDecimal(value));
     return (

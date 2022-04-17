@@ -17,5 +17,5 @@ export const Switch = props => {
 
 
 export const Case = ({ children }) => {
-    return children;
+    return children ? children : <></>;
 };
