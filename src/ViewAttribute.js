@@ -88,7 +88,7 @@ function ViewAttribute(props) {
 
     const handleSave = async () => {
 
-        //dispatch(setLoadingState(1));
+        dispatch(setLoadingState(1));
 
         // Проверка на то, что название содержит только кириллицу, латиницу, цифры или пробел, и начинается с буквы
         if (!/^[А-Яа-яЁеA-Za-z]/.test(attr.AttrName) || /[^А-Яа-яЁеA-Za-z0-9 ]/.test(attr.AttrName)) {

@@ -225,7 +225,7 @@ export function deleteCategory(category) {
         try {
             await axiosPrivate.delete(`category/${category.CategoryId}`);
 
-            dispatch(categoriesLoad());
+            await dispatch(categoriesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -238,7 +238,7 @@ export function updateCategory(category) {
         try {
             await axiosPrivate.put(`category/${category.CategoryId}`, category);
 
-            dispatch(categoriesLoad());
+            await dispatch(categoriesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -251,7 +251,7 @@ export function createCategory(category) {
         try {
             await axiosPrivate.post(`category`, category);
 
-            dispatch(categoriesLoad());
+            await dispatch(categoriesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -264,7 +264,7 @@ export function updateTable(table) {
         try {
             await axiosPrivate.put(`table/${table.TableId}`, table);
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -277,7 +277,7 @@ export function createTable(table) {
         try {
             await axiosPrivate.post(`table`, table);
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -290,7 +290,7 @@ export function deleteTable(table) {
         try {
             await axiosPrivate.delete(`table/${table.TableId}`);
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
             console.log(error);
@@ -305,7 +305,7 @@ export function updateAttributes(attrs) {
         try {
             await axiosPrivate.put(`table/attribute`, attrs);
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -341,9 +341,12 @@ export function updateAttribute(typeChanged, attr) {
         try {
             await axiosPrivate.put(`table/attribute/${attr.AttrId}`, { typeChanged: typeChanged, attribute: attr });
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
+            console.log("updateAttribute > error: ", error);
+            if (error?.response)
+                console.log("updateAttribute > error.response: ", error.response);
             return 0;
         }
     }
@@ -354,7 +357,7 @@ export function createAttribute(attr) {
         try {
             await axiosPrivate.post(`table/attribute`, attr);
 
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 1;
         } catch (error) {
             return 0;
@@ -366,7 +369,7 @@ export function deleteAttribute(attrId) {
     return async dispatch => {
         try {
             await axiosPrivate.delete(`table/attribute/${attrId}`);
-            dispatch(tablesLoad());
+            await dispatch(tablesLoad());
             return 0;
         } catch (error) {
             return error.response.status;
