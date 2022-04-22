@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTable, useSortBy, useBlockLayout, useResizeColumns, usePagination } from 'react-table'
 import { SortDirection } from './redux/enums';
 import './styles/BasicTable.css';
@@ -35,6 +35,10 @@ function BasicTable({ columns, data, onRowClicked }) {
     } = useTable({ columns, data, defaultColumn }, useSortBy, useBlockLayout, useResizeColumns, usePagination);
 
     const { pageIndex, pageSize } = state;
+
+    useEffect(() => {
+        setPageSize(50);
+    }, [setPageSize]);
 
     return (
         <>
