@@ -42,7 +42,7 @@ function TablePage() {
             const value = row[selectAttr.SystemAttrName];
             return value;
         } catch (error) {
-            return String(null);
+            return '';
         }
     }, [allTables]);
 
@@ -64,13 +64,13 @@ function TablePage() {
                                 case 'join':
                                     return getJoinAttr(value, attr.AttrTypeProp1, attr.AttrTypeProp2);
                                 case 'varchar':
-                                    return String(value);
+                                    return value;
                                 case 'text':
-                                    return String(value);
+                                    return value;
                                 case 'int':
-                                    return String(value);
+                                    return value;
                                 case 'decimal':
-                                    return String(value);
+                                    return value;
                                 default:
                                     return String(value);
                             }
@@ -102,7 +102,7 @@ function TablePage() {
                 tables.length > 0 ?
                     <div className='content-tabs'>
                         {currentTable?.Attributes.some(a => a.PkFlag === 0) ? <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button> : <></>}
-                        <BasicTable columns={columns} data={currentTable?.Data} />
+                        <BasicTable columns={columns} data={currentTable?.Data} onRowClicked={handleRowEdit} />
                     </div>
                     : <div className='empty-category'>В базе отсутствуют таблицы.</div>
                 : <></>

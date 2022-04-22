@@ -4,7 +4,7 @@ import { SortDirection } from './redux/enums';
 import './styles/BasicTable.css';
 
 
-function BasicTable({ columns, data }) {
+function BasicTable({ columns, data, onRowClicked }) {
 
     //columnsArg should be w/o ID attr and sorted by ord
 
@@ -63,46 +63,49 @@ function BasicTable({ columns, data }) {
                     {page.map(row => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr {...row.getRowProps()} className='attr-row'>
                                 {row.cells.map(cell => {
-                                    return <td className='attr-cell' {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    return <td className='attr-cell' {...cell.getCellProps()} onClick={() => onRowClicked(cell.row.original)}>{cell.render('Cell')}</td>
                                 })}
                             </tr>
                         )
                     })}
                 </tbody>
             </table>
-            <div className='pagination-block'>
-                <span>
-                    Страница{' '}
-                    <strong>
-                        {pageIndex + 1} из {pageOptions.length}
-                    </strong>{' '}
-                </span>
-                <span>
-                    | Перейти на страницу: {' '}
-                    <input type='number' defaultValue={pageIndex + 1}
-                        onChange={e => {
-                            const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(pageNumber)
-                        }}
-                        style={{ width: '50px', textAlign: 'center'}}
-                    />
-                </span>
-                <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
-                    {
-                        [5, 10, 25, 50, 100].map(pageSize => (
-                            <option key={pageSize} value={pageSize}>
-                                Отображать {pageSize}
-                            </option>
-                        ))
-                    }
-                </select>
-                <button className='page-btn' onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</button>
-                <button className='page-btn' onClick={() => previousPage()} disabled={!canPreviousPage}>Предыдущая страница</button>
-                <button className='page-btn' onClick={() => nextPage()} disabled={!canNextPage}>Следующая страница</button>
-                <button className='page-btn' onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</button>
-            </div>
+            {pageOptions.length > 0 ?
+                <div className='pagination-block'>
+                    <span>
+                        Страница{' '}
+                        <strong>
+                            {pageIndex + 1} из {pageOptions.length}
+                        </strong>{' '}
+                    </span>
+                    <span>
+                        | Перейти на страницу: {' '}
+                        <input type='number' defaultValue={pageIndex + 1}
+                            onChange={e => {
+                                const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0
+                                gotoPage(pageNumber)
+                            }}
+                            style={{ width: '50px', textAlign: 'center' }}
+                        />
+                    </span>
+                    <select value={pageSize} onChange={e => setPageSize(Number(e.target.value))}>
+                        {
+                            [5, 10, 25, 50, 100].map(pageSize => (
+                                <option key={pageSize} value={pageSize}>
+                                    Отображать {pageSize}
+                                </option>
+                            ))
+                        }
+                    </select>
+                    <button className='page-btn' onClick={() => gotoPage(0)} disabled={!canPreviousPage}>{'<<'}</button>
+                    <button className='page-btn' onClick={() => previousPage()} disabled={!canPreviousPage}>Предыдущая страница</button>
+                    <button className='page-btn' onClick={() => nextPage()} disabled={!canNextPage}>Следующая страница</button>
+                    <button className='page-btn' onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>{'>>'}</button>
+                </div>
+                : <></>
+            }
         </>
     )
 }
