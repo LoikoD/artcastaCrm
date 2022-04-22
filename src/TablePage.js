@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { selectRow } from './redux/actions';
 import LoadingOverlay from './LoadingOverlay';
+import BasicTable from './BasicTable';
 import './styles/Navigation.css';
-import './styles/TablePage.css';
-import { SortDirection } from './redux/enums';
-import { Case, Switch } from './helpers/Switch';
 
 function TablePage() {
 
@@ -36,8 +33,54 @@ function TablePage() {
         return configureReducer.attrTypes;
     });
 
-    const [sortedData, setSortedData] = useState(currentTable?.Data);
-    const [sortInfo, setSortInfo] = useState({ sortAttr: "", sortDirection: SortDirection.NONE });
+    const getJoinAttr = useCallback((id, tableId, attrId) => {
+        try {
+            const joinTable = allTables.find(t => t.TableId === tableId);
+            const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
+            const selectAttr = joinTable.Attributes.find(a => a.AttrId === attrId);
+            const row = joinTable.Data.find(r => r[pkAttr.SystemAttrName] === id);
+            const value = row[selectAttr.SystemAttrName];
+            return value;
+        } catch (error) {
+            return String(null);
+        }
+    }, [allTables]);
+
+    const columns = useMemo(() => {
+        if (currentTable?.Attributes?.some(a => a.PkFlag === 0)) {
+            return currentTable?.Attributes
+                ?.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0))
+                ?.filter((attr) => attr.PkFlag === 0)
+                ?.map((attr) => (
+                    {
+                        Header: attr.AttrName,
+                        accessor: attr.SystemAttrName,
+                        Cell: ({ value }) => {
+                            switch (attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName) {
+                                case 'date':
+                                    return value ? new Date(value).toLocaleDateString() : String(value);
+                                case 'datetime2':
+                                    return value ? new Date(value).toLocaleString() : String(value);
+                                case 'join':
+                                    return getJoinAttr(value, attr.AttrTypeProp1, attr.AttrTypeProp2);
+                                case 'varchar':
+                                    return String(value);
+                                case 'text':
+                                    return String(value);
+                                case 'int':
+                                    return String(value);
+                                case 'decimal':
+                                    return String(value);
+                                default:
+                                    return String(value);
+                            }
+                        }
+                    })
+                )
+        } else {
+            return [];
+        }
+    }, [currentTable, attrTypes, getJoinAttr]);
 
     const handleRowEdit = (row) => {
         dispatch(selectRow(row));
@@ -49,42 +92,7 @@ function TablePage() {
         navigate('/add_row');
     };
 
-    const handleSort = (attrName, attrType) => {
-        if (sortInfo.sortAttr === attrName && sortInfo.sortDirection === SortDirection.DOWN) {
-            if (attrType === 'date') {
-                setSortedData(currentTable?.Data.sort((a, b) => (new Date(a[attrName]).getTime() < new Date(b[attrName]).getTime()) ? 1 : ((new Date(b[attrName]).getTime() < new Date(a[attrName]).getTime()) ? -1 : 0)));
-            } else {
-                setSortedData(currentTable?.Data.sort((a, b) => (a[attrName] < b[attrName]) ? 1 : ((b[attrName] < a[attrName]) ? -1 : 0)));
-            }
-            setSortInfo({ sortAttr: attrName, sortDirection: SortDirection.UP })
-        } else {
-            if (attrType === 'date') {
-                setSortedData(currentTable?.Data.sort((a, b) => (new Date(a[attrName]).getTime() > new Date(b[attrName]).getTime()) ? 1 : ((new Date(b[attrName]).getTime() > new Date(a[attrName]).getTime()) ? -1 : 0)));
-            } else {
-                setSortedData(currentTable?.Data.sort((a, b) => (a[attrName] > b[attrName]) ? 1 : ((b[attrName] > a[attrName]) ? -1 : 0)));
-            }
-            setSortInfo({ sortAttr: attrName, sortDirection: SortDirection.DOWN })
-        }
-    };
 
-    const getJoinAttr = (id, tableId, attrId) => {
-        try {
-            const joinTable = allTables.find(t => t.TableId === tableId);
-            const pkAttr = joinTable.Attributes.find(a => a.PkFlag === 1);
-            const selectAttr = joinTable.Attributes.find(a => a.AttrId === attrId);
-            const row = joinTable.Data.find(r => r[pkAttr.SystemAttrName] === id);
-            const value = row[selectAttr.SystemAttrName];
-            return value;
-        } catch (error) {
-            //console.log("getJoinAttr > error: ", error);
-            return null;
-        }
-    }
-
-    useEffect(() => {
-        setSortedData(currentTable?.Data);
-        setSortInfo({ sortAttr: "", sortDirection: SortDirection.NONE })
-    }, [currentTable]);
 
     return (
 
@@ -94,57 +102,7 @@ function TablePage() {
                 tables.length > 0 ?
                     <div className='content-tabs'>
                         {currentTable?.Attributes.some(a => a.PkFlag === 0) ? <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button> : <></>}
-                        <Table className='custom-tbl' striped bordered hover >
-                            <thead>
-                                <tr >
-                                    {currentTable?.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
-                                        attr.PkFlag === 0 &&
-                                        <th key={attr.AttrId} onClick={() => handleSort(attr.SystemAttrName, attr.SystemAttrTypeName)} className='attr-header-cell' >
-                                            <div className='attr-header-div'>
-                                                <div>{attr.AttrName}</div>
-                                                <div className='sort-arrow'>{sortInfo.sortAttr === attr.SystemAttrName ? sortInfo.sortDirection : <>&ensp;</>}</div>
-                                            </div>
-                                        </th>
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedData?.map((row, rowIdx) =>
-                                    <tr key={rowIdx} className='row' onClick={() => handleRowEdit(row)}>
-                                        {row && currentTable.Attributes.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0)).map((attr) =>
-                                            attr.PkFlag === 0 &&
-                                            <td key={attr.AttrId} className='attr-cell'>
-                                                <Switch expression={attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName}>
-                                                    <Case value='varchar'>
-                                                        {row[attr.SystemAttrName]}
-                                                    </Case>
-                                                    <Case value='text'>
-                                                        {row[attr.SystemAttrName]}
-                                                    </Case>
-                                                    <Case value='int'>
-                                                        {`${row[attr.SystemAttrName]}`}
-                                                    </Case>
-                                                    <Case value='decimal'>
-                                                        {row[attr.SystemAttrName]}
-                                                    </Case>
-                                                    <Case value='date'>
-                                                        {row[attr.SystemAttrName] ? new Date(row[attr.SystemAttrName]).toLocaleDateString() : row[attr.SystemAttrName]}
-                                                    </Case>
-                                                    <Case value='datetime2'>
-                                                        {row[attr.SystemAttrName] ? new Date(row[attr.SystemAttrName]).toLocaleString() : row[attr.SystemAttrName]}
-                                                    </Case>
-                                                    <Case value='join'>
-                                                        {getJoinAttr(row[attr.SystemAttrName], attr.AttrTypeProp1, attr.AttrTypeProp2)}
-                                                    </Case>
-                                                    <Case value='default'>
-                                                        <></>
-                                                    </Case>
-                                                </Switch>
-                                            </td>
-                                        )}
-                                    </tr>)}
-                            </tbody>
-                        </Table>
+                        <BasicTable columns={columns} data={currentTable?.Data} />
                     </div>
                     : <div className='empty-category'>В базе отсутствуют таблицы.</div>
                 : <></>
