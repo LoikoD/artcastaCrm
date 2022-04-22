@@ -47,35 +47,45 @@ function TablePage() {
     }, [allTables]);
 
     const columns = useMemo(() => {
+        const getValueString = (value, attr) => {
+            switch (attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName) {
+                case 'date':
+                    return value ? new Date(value).toLocaleDateString() : String(value);
+                case 'datetime2':
+                    return value ? new Date(value).toLocaleString() : String(value);
+                case 'join':
+                    return getJoinAttr(value, attr.AttrTypeProp1, attr.AttrTypeProp2);
+                case 'varchar':
+                    return value;
+                case 'text':
+                    return value;
+                case 'int':
+                    return value;
+                case 'decimal':
+                    return value;
+                default:
+                    return String(value);
+            }
+        };
+        const getWidth = (attr) => {
+            const maxWidth = Math.max(...currentTable?.Data?.map((row) => (String(getValueString(row[attr.SystemAttrName], attr))?.length * 10 + 5)), attr.AttrName.length * 10 + 33);
+            const minWidth = Math.min(maxWidth, 800);
+            return minWidth;
+        };
         if (currentTable?.Attributes?.some(a => a.PkFlag === 0)) {
             return currentTable?.Attributes
                 ?.sort((a, b) => (a.Ord > b.Ord) ? 1 : ((b.Ord > a.Ord) ? -1 : 0))
                 ?.filter((attr) => attr.PkFlag === 0)
-                ?.map((attr) => (
-                    {
+                ?.map((attr) => {
+                    return {
                         Header: attr.AttrName,
                         accessor: attr.SystemAttrName,
                         Cell: ({ value }) => {
-                            switch (attrTypes.find(attrType => attrType.AttrTypeId === attr.AttrTypeId).SystemAttrTypeName) {
-                                case 'date':
-                                    return value ? new Date(value).toLocaleDateString() : String(value);
-                                case 'datetime2':
-                                    return value ? new Date(value).toLocaleString() : String(value);
-                                case 'join':
-                                    return getJoinAttr(value, attr.AttrTypeProp1, attr.AttrTypeProp2);
-                                case 'varchar':
-                                    return value;
-                                case 'text':
-                                    return value;
-                                case 'int':
-                                    return value;
-                                case 'decimal':
-                                    return value;
-                                default:
-                                    return String(value);
-                            }
-                        }
-                    })
+                            return getValueString(value, attr);
+                        },
+                        width: getWidth(attr)
+                    }
+                }
                 )
         } else {
             return [];
