@@ -3,7 +3,7 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import TextareaAutosize from 'react-textarea-autosize';
-import { DecimalInput, IntegerInput } from './helpers/CustomInputs';
+import { DecimalInput, IntegerInput } from './components/CustomInputs';
 import { Case, Switch } from './helpers/Switch';
 import LoadingOverlay from './LoadingOverlay';
 import { addRow, deleteRow, openTable, saveRow, setLoadingState } from './redux/actions';
