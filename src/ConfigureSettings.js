@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom';
-import { AccessPoints } from './redux/enums';
+import { SettingsMenu } from './redux/enums';
 import RequireRoles from './RequireRoles';
 
 function ConfigureSettings() {
     return (
-        <RequireRoles access_point={AccessPoints.CONFIGURE}>
+        <RequireRoles access_points={SettingsMenu.CONF}>
             <Outlet />
         </RequireRoles>
     );

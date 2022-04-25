@@ -9,7 +9,7 @@ import UsersSettings from './UsersSettings';
 import RolesSettings from './RolesSettings';
 import { tryLogin } from './redux/actions'
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import TablePage from './TablePage';
 import { ViewMods } from './redux/enums';
@@ -20,12 +20,17 @@ import ViewTable from './ViewTable';
 import ConfigureAttributes from './ConfigureAttributes';
 import ViewAttribute from './ViewAttribute';
 import ConfigureSettings from './ConfigureSettings';
+import RolesList from './RolesList';
+import LoadingOverlay from './LoadingOverlay';
+//import ViewRole from './ViewRole';
 
 function App(props) {
 
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(0);
+
+  const ViewRole = React.lazy(() => import('./ViewRole'));
 
   const loggedIn = useSelector(state => {
     const { authReducer } = state;
@@ -39,11 +44,22 @@ function App(props) {
 
   useEffect(() => {
     const redirectToHomeNames = ['/view_row', '/add_row'];
-    const redirectToConfNames = ['/configure/tables', '/configure/edit_category', '/configure/edit_table', '/configure/add_table', '/configure/attributes', '/configure/edit_attribute', '/configure/add_attribute'];
+    const redirectToConfNames =
+      [
+        '/configure/tables',
+        '/configure/edit_category',
+        '/configure/edit_table',
+        '/configure/add_table',
+        '/configure/attributes',
+        '/configure/edit_attribute',
+        '/configure/add_attribute'
+      ];
     if (redirectToHomeNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/');
     } else if (redirectToConfNames.includes(window.location.pathname)) {
       window.history.replaceState(null, null, '/configure');
+    } else if (window.location.pathname.startsWith('/roles/')) {
+      window.history.replaceState(null, null, '/roles');
     }
 
     dispatch(tryLogin());
@@ -61,33 +77,40 @@ function App(props) {
       <></>
       :
       <Router>
-        <Routes>
-          <Route exact path="/login" element={<Login />} />
-          <Route element={<Layout />}>
-            <Route element={<TableLayout />} >
-              <Route exact path="/" element={<TablePage />} />
-              <Route exact path="/view_row" element={<ViewRow mode={ViewMods.VIEW} />} />
-              <Route exact path="/add_row" element={<ViewRow mode={ViewMods.ADD} />} />
-            </Route>
-            <Route element={<Settings />} >
-              <Route element={<ConfigureSettings />} >
-                <Route exact path="/configure" element={<ConfigureCategories />} />
-                <Route exact path="/configure/edit_category" element={<ViewCategory mode={ViewMods.VIEW} />} />
-                <Route exact path="/configure/add_category" element={<ViewCategory mode={ViewMods.ADD} />} />
-                <Route exact path="/configure/tables" element={<ConfigureTables />} />
-                <Route exact path="/configure/edit_table" element={<ViewTable mode={ViewMods.VIEW} />} />
-                <Route exact path="/configure/add_table" element={<ViewTable mode={ViewMods.ADD} />} />
-                <Route exact path="/configure/attributes" element={<ConfigureAttributes />} />
-                <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
-                <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
+        <Suspense fallback={<LoadingOverlay show={1} />}>
+          <Routes>
+            <Route exact path="/login" element={<Login />} />
+            <Route element={<Layout />}>
+              <Route element={<TableLayout />} >
+                <Route exact path="/" element={<TablePage />} />
+                <Route exact path="/view_row" element={<ViewRow mode={ViewMods.VIEW} />} />
+                <Route exact path="/add_row" element={<ViewRow mode={ViewMods.ADD} />} />
               </Route>
-              <Route exact path="/users" element={<UsersSettings />} />
-              <Route exact path="/roles" element={<RolesSettings />} />
+              <Route element={<Settings />} >
+                <Route element={<ConfigureSettings />} >
+                  <Route exact path="/configure" element={<ConfigureCategories />} />
+                  <Route exact path="/configure/edit_category" element={<ViewCategory mode={ViewMods.VIEW} />} />
+                  <Route exact path="/configure/add_category" element={<ViewCategory mode={ViewMods.ADD} />} />
+                  <Route exact path="/configure/tables" element={<ConfigureTables />} />
+                  <Route exact path="/configure/edit_table" element={<ViewTable mode={ViewMods.VIEW} />} />
+                  <Route exact path="/configure/add_table" element={<ViewTable mode={ViewMods.ADD} />} />
+                  <Route exact path="/configure/attributes" element={<ConfigureAttributes />} />
+                  <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
+                  <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
+                </Route>
+                <Route exact path="/users" element={<UsersSettings />} />
+                <Route element={<RolesSettings />} >
+
+                  <Route exact path="/roles" element={<RolesList />} />
+                  <Route exact path="/roles/edit_role/:roleId" element={<ViewRole mode={ViewMods.VIEW} />} />
+                  <Route exact path="/roles/add_role" element={<ViewRole mode={ViewMods.ADD} />} />
+                </Route>
+              </Route>
+              <Route exact path="/profile" element={<Profile />} />
             </Route>
-            <Route exact path="/profile" element={<Profile />} />
-          </Route>
-          <Route path="*" element={<Navigate to='/' replace />} />
-        </Routes>
+            <Route path="*" element={<Navigate to='/' replace />} />
+          </Routes>
+        </Suspense>
       </Router>
 
   );

@@ -1,11 +1,11 @@
-import { AccessPoints } from "./redux/enums";
+import { SettingsMenu } from "./redux/enums";
 import RequireRoles from "./RequireRoles";
 
 function UsersSettings() {
 
 
     return (
-        <RequireRoles access_point={AccessPoints.USERS}>
+        <RequireRoles access_points={SettingsMenu.USERS}>
             <div>
                 <h5>UsersSettings</h5>
             </div>

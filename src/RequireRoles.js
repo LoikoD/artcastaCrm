@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-function RequireRoles({ access_point, children }) {
+function RequireRoles({ children, access_points }) {
 
 
   const user = useSelector(state => {
@@ -19,14 +19,15 @@ function RequireRoles({ access_point, children }) {
 
   useEffect(() => {
     setShow(false);
-    if (!user.AccessPoints.includes(access_point)) {
+    const isFounded = user.AccessPoints.some(ap => access_points.includes(ap));
+    if (!isFounded) {
       setAllowed(false);
       setShow(true);
     } else {
       setAllowed(true);
       setShow(true);
     }
-  }, [access_point, categories, user.AccessPoints]);
+  }, [access_points, categories, user.AccessPoints]);
 
 
   return (

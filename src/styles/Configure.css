@@ -177,3 +177,54 @@ button[disabled] {
     background-color: #d9d2e9;
     color: black;
 }
+
+.conf-list-item {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    padding: 5px;
+    margin-bottom: 2px;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+}
+
+.conf-checkbox {
+    padding: 0px 4px;
+    background-color: white;
+    border-radius: 5px;
+    margin: auto;
+    width: fit-content;
+}
+
+.center-white {
+    text-align: center;
+    color: white;
+}
+
+.md-size {
+    font-size: large;
+}
+
+.pointer {
+    cursor: pointer;
+    user-select: none;
+}
+
+.conf-checkbox-input {
+    accent-color: #d9d2e9;
+    width: 17px;
+    height: 17px;
+}
+
+.margin-bot-10 {
+    margin-bottom: 10px;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.conf-btn[disabled] {
+    opacity: 0.5;
+}
