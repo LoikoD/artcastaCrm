@@ -1,8 +1,7 @@
-import { SET_EDITED_ROLE, SET_ROLES } from './types'
+import { SET_ROLES } from './types'
 
 const initialState = {
-    roles: [],
-    editedRole: {}
+    roles: []
 }
 
 export const rolesReducer = (state = initialState, action) => {
@@ -11,11 +10,6 @@ export const rolesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 roles: action.roles
-            }
-        case SET_EDITED_ROLE:
-            return {
-                ...state,
-                editedRole: action.role
             }
         default:
             return state;

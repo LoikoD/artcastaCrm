@@ -16,4 +16,3 @@ export const OPEN_CONF_ATTR = 'OPEN_CONF_ATTR';
 export const LOAD_ATTR_TYPES = 'LOAD_ATTR_TYPES';
 export const SET_USERS = 'SET_USERS';
 export const SET_ROLES = 'SET_ROLES';
-export const SET_EDITED_ROLE = 'SET_EDITED_ROLE';

@@ -5,6 +5,7 @@ import { selectRow } from './redux/actions';
 import LoadingOverlay from './LoadingOverlay';
 import BasicTable from './BasicTable';
 import './styles/Navigation.css';
+import useAccessCategories from './hooks/useAccessCategories';
 
 function TablePage() {
 
@@ -32,6 +33,12 @@ function TablePage() {
         const { configureReducer } = state;
         return configureReducer.attrTypes;
     });
+    const currentCategory = useSelector(state => {
+        const { navigationReducer } = state;
+        return navigationReducer.currentCategory;
+    });
+    const accessCategories = useAccessCategories();
+
 
     const getJoinAttr = useCallback((id, tableId, attrId) => {
         try {
@@ -111,8 +118,11 @@ function TablePage() {
             {JSON.stringify(currentTable) !== JSON.stringify({}) ?
                 tables.length > 0 ?
                     <div className='content-tabs'>
-                        {currentTable?.Attributes.some(a => a.PkFlag === 0) ? <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button> : <></>}
-                        <BasicTable columns={columns} data={currentTable?.Data} onRowClicked={handleRowEdit} />
+                        {
+                            currentTable?.Attributes.some(a => a.PkFlag === 0) && accessCategories.find(ac => ac.Id === currentCategory.CategoryId)?.CanEdit
+                            ? <button className='def-btn add-btn' onClick={(e) => handleAddRow(e)}>Добавить</button> : <></>
+                        }
+                        <BasicTable columns={columns} data={currentTable?.Data} onRowClicked={accessCategories.find(ac => ac.Id === currentCategory.CategoryId)?.CanEdit ? handleRowEdit : null} />
                     </div>
                     : <div className='empty-category'>В базе отсутствуют таблицы.</div>
                 : <></>

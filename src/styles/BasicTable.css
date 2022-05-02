@@ -27,13 +27,14 @@
     padding-left: 10px;
 }
 
-.attr-row {
+.attr-row-pointer {
     cursor: pointer;
+    user-select: none;
 }
+
 .attr-cell {
     margin: 0;
     padding: 0.5rem;
-    user-select: none;
     position: relative;
     word-wrap: break-word;
 }

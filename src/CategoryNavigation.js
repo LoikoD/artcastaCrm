@@ -3,6 +3,7 @@ import { useDispatch, useSelector} from 'react-redux';
 import { openCategory, openTable, setLoadingState } from './redux/actions';
 import './styles/Navigation.css';
 import { useNavigate } from 'react-router-dom';
+import useAccessCategories from './hooks/useAccessCategories';
 
 function CategoryNavigation(props) {
 
@@ -30,6 +31,9 @@ function CategoryNavigation(props) {
         return navigationReducer.currentTable;
     });
 
+    const accessCategories = useAccessCategories();
+
+
     const handleClickTab = (e, category) => {
         dispatch(setLoadingState(1));
         dispatch(openCategory(category));
@@ -55,6 +59,7 @@ function CategoryNavigation(props) {
         <div className='bloc-tabs'>
 
             {categories.map(category=>
+                accessCategories?.find(ac => ac.Id === category.CategoryId) &&
                 <button key={category.CategoryId} className={currentCategory?.CategoryId === category.CategoryId ? 'tabs active-tabs active-tabs-category' : 'tabs'} onClick={(e) => handleClickTab(e, category)}>
                     {category.CategoryName}
                 </button>

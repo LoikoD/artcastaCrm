@@ -1,7 +1,6 @@
 import Login from './Login';
 import TableLayout from './TableLayout';
 import Settings from './Settings';
-import Layout from './Layout';
 import Profile from './Profile';
 import ViewRow from './ViewRow';
 import ConfigureCategories from './ConfigureCategories';
@@ -22,7 +21,6 @@ import ViewAttribute from './ViewAttribute';
 import ConfigureSettings from './ConfigureSettings';
 import RolesList from './RolesList';
 import LoadingOverlay from './LoadingOverlay';
-//import ViewRole from './ViewRole';
 
 function App(props) {
 
@@ -30,7 +28,10 @@ function App(props) {
 
   const [show, setShow] = useState(0);
 
+  const Layout = React.lazy(() => import('./Layout'));
   const ViewRole = React.lazy(() => import('./ViewRole'));
+  const ViewUser = React.lazy(() => import('./ViewUser'));
+  const UsersList = React.lazy(() => import('./UsersList'));
 
   const loggedIn = useSelector(state => {
     const { authReducer } = state;
@@ -60,6 +61,9 @@ function App(props) {
       window.history.replaceState(null, null, '/configure');
     } else if (window.location.pathname.startsWith('/roles/')) {
       window.history.replaceState(null, null, '/roles');
+    }
+    else if (window.location.pathname.startsWith('/users/')) {
+      window.history.replaceState(null, null, '/users');
     }
 
     dispatch(tryLogin());
@@ -98,9 +102,12 @@ function App(props) {
                   <Route exact path="/configure/edit_attribute" element={<ViewAttribute mode={ViewMods.VIEW} />} />
                   <Route exact path="/configure/add_attribute" element={<ViewAttribute mode={ViewMods.ADD} />} />
                 </Route>
-                <Route exact path="/users" element={<UsersSettings />} />
+                <Route element={<UsersSettings />} >
+                  <Route exact path="/users" element={<UsersList />} />
+                  <Route exact path="/users/edit_user/:userId" element={<ViewUser mode={ViewMods.VIEW} />} />
+                  <Route exact path="/users/add_user" element={<ViewUser mode={ViewMods.ADD} />} />
+                </Route>
                 <Route element={<RolesSettings />} >
-
                   <Route exact path="/roles" element={<RolesList />} />
                   <Route exact path="/roles/edit_role/:roleId" element={<ViewRole mode={ViewMods.VIEW} />} />
                   <Route exact path="/roles/add_role" element={<ViewRole mode={ViewMods.ADD} />} />

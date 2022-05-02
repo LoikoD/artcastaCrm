@@ -67,9 +67,9 @@ function BasicTable({ columns, data, onRowClicked }) {
                     {page.map(row => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()} className='attr-row'>
+                            <tr {...row.getRowProps()} className={onRowClicked ? 'attr-row-pointer' : ''}>
                                 {row.cells.map(cell => {
-                                    return <td className='attr-cell' {...cell.getCellProps()} onClick={() => onRowClicked(cell.row.original)}>{cell.render('Cell')}</td>
+                                    return <td className='attr-cell' {...cell.getCellProps()} onClick={() => onRowClicked ? onRowClicked(cell.row.original) : null}>{cell.render('Cell')}</td>
                                 })}
                             </tr>
                         )

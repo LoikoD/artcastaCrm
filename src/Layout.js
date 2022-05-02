@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadAttrTypes, logout, selectSettingsMenu } from './redux/actions'
 import { Outlet, useNavigate } from 'react-router-dom';
 import RequireAuth from './RequireAuth';
-import CategoryNavigation from './CategoryNavigation';
-import { categoriesLoad, openCategory } from './redux/actions';
+import { categoriesLoad, openCategory, getRoles } from './redux/actions';
 import { SettingsMenu } from './redux/enums';
 
 import './styles/Layout.css';
 
 function Layout() {
+
+  const CategoryNavigation = React.lazy(() => import('./CategoryNavigation'));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ function Layout() {
   useEffect(() => {
     dispatch(categoriesLoad());
     dispatch(loadAttrTypes());
+    dispatch(getRoles());
   }, [dispatch]);
 
   return (

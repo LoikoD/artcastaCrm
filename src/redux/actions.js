@@ -1,4 +1,4 @@
-import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU, UPDATE_CATEGORIES, OPEN_CONF_CATEGORY, OPEN_CONF_TABLE, OPEN_CONF_ATTR, LOAD_ATTR_TYPES, SET_ROLES } from "./types";
+import { CATEGORIES_LOAD, OPEN_TABLE, TABLES_LOAD, OPEN_CATEGORY, LOGIN, REFRESH, INIT_LOCATION, SELECT_ROW, LOADING_STATE, SELECT_SETTINGS_MENU, UPDATE_CATEGORIES, OPEN_CONF_CATEGORY, OPEN_CONF_TABLE, OPEN_CONF_ATTR, LOAD_ATTR_TYPES, SET_ROLES, SET_USERS } from "./types";
 import { axiosPrivate } from "../api/axios";
 
 
@@ -381,7 +381,6 @@ export function getRoles() {
     return async dispatch => {
         try {
             const { data } = await axiosPrivate.get('roles');
-            console.log('getRoles > data:', data);
             dispatch({
                 type: SET_ROLES,
                 roles: data
@@ -400,6 +399,35 @@ export function deleteRole(roleId) {
         try {
             await axiosPrivate.delete(`roles/${roleId}`);
             await dispatch(getRoles());
+            return 0;
+        } catch (error) {
+            return error.response.status;
+        }
+    }
+}
+
+export function getUsers() {
+    return async dispatch => {
+        try {
+            const { data } = await axiosPrivate.get('user');
+            dispatch({
+                type: SET_USERS,
+                users: data
+            });
+        } catch (error) {
+            console.log("getUsers > error: ", error);
+            if (error?.response)
+                console.log("getUsers > error.response: ", error.response);
+            return 0;
+        }
+    }
+}
+
+export function deleteUser(userId) {
+    return async dispatch => {
+        try {
+            await axiosPrivate.delete(`user/${userId}`);
+            await dispatch(getUsers());
             return 0;
         } catch (error) {
             return error.response.status;
