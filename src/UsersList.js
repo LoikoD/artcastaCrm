@@ -13,6 +13,11 @@ function UsersList() {
         return usersReducer.users;
     });
 
+    const authUser = useSelector(state => {
+        const { authReducer } = state;
+        return authReducer.user;
+    });
+
     const handleDelete = (user) => {
         dispatch(setLoadingState(1));
         console.log('deleting user: ', user);
@@ -76,12 +81,12 @@ function UsersList() {
                                 <button
                                     className='conf-btn edit-conf-btn'
                                     onClick={() => handleEdit(user)}
-                                    //disabled={user.RoleId === 1} // RoleId === 1 - "Владелец"
+                                    disabled={user.RoleId === 1 && !(authUser.RoleId === 1)} // RoleId === 1 - "Владелец"
                                 >Редактировать</button>
                                 <button
                                     className='conf-btn delete-conf-btn'
                                     onClick={() => window.confirm('Действительно хотите удалить этого пользователя?') ? handleDelete(user) : null}
-                                    //disabled={user.RoleId === 1} // RoleId === 1 - "Владелец"
+                                    disabled={user.RoleId === 1} // RoleId === 1 - "Владелец"
                                 >Удалить</button>
                             </div>
                         </div>

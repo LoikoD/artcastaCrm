@@ -72,6 +72,7 @@ function ViewUser({ mode }) {
                                 className='str-value-input'
                                 value={user.Username}
                                 onChange={(e) => handleInputUsername(e.target.value)}
+                                disabled={user.RoleId === 1}
                             />
                         </div>
                     </div>
@@ -79,7 +80,12 @@ function ViewUser({ mode }) {
                     <div className='conf-edit-block'>
                         <div className='conf-edit-name'>Роль:</div>
                         <div className='conf-edit-value'>
-                            <DropdownButton id="dropdown-basic-button" variant='conf-dropdown' title={roles.find(r => r.RoleId === user.RoleId)?.RoleName}>
+                            <DropdownButton
+                                id="dropdown-basic-button"
+                                variant='conf-dropdown'
+                                title={roles.find(r => r.RoleId === user.RoleId)?.RoleName}
+                                disabled={user.RoleId === 1}
+                            >
                                 {roles.map((role, index) =>
                                     role.RoleId !== 1 // RoleId = 1 - "Владелец", эту роль нельзя назначить
                                     &&
@@ -102,11 +108,12 @@ function ViewUser({ mode }) {
                                 className='str-value-input'
                                 defaultValue={'***************'}
                                 readOnly
+                                disabled={user.RoleId === 1}
                             />
                             <button
                                 className='conf-btn back-conf-btn'
                                 onClick={() => copy(user.Password)}
-                                disabled={!user.Password}
+                                disabled={!user.Password || user.RoleId === 1}
                             >
                                 📋
                             </button>
@@ -117,6 +124,7 @@ function ViewUser({ mode }) {
                         <button
                             className='conf-btn delete-conf-btn'
                             onClick={() => window.confirm('Вы уверены, что хотите сбросить пароль?') ? resetPassword() : null}
+                            disabled={user.RoleId === 1}
                         >
                             Сбросить пароль
                         </button>
@@ -127,7 +135,7 @@ function ViewUser({ mode }) {
                     <button
                         className='conf-btn save-conf-btn'
                         onClick={() => handleSave()}
-                        disabled={!(user.Username && roles.find(r => r.RoleId === user.RoleId))}
+                        disabled={!(user.Username && roles.find(r => r.RoleId === user.RoleId)) || user.RoleId === 1}
                     >Сохранить</button>
                     <button
                         className='conf-btn back-conf-btn'
